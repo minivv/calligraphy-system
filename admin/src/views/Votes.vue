@@ -99,21 +99,29 @@ export default {
       const res = await this.$request.get(`/api/vote-item/list/${row.id}`)
       this.voteItems = res.data || []
       const workRes = await this.$request.get('/api/work/page', { params: { pageNum: 1, pageSize: 1000 } })
-      this.availableWorks = (workRes.data.records || []).filter(w => w.status === 1)
+      const existingWorkIds = this.voteItems.map(item => item.workId)
+      this.availableWorks = (workRes.data.records || []).filter(w => w.status === 1 && !existingWorkIds.includes(w.id))
       this.itemDialogVisible = true
+    },
+    async refreshItems() {
+      const [itemRes, workRes] = await Promise.all([
+        this.$request.get(`/api/vote-item/list/${this.currentVoteId}`),
+        this.$request.get('/api/work/page', { params: { pageNum: 1, pageSize: 1000 } })
+      ])
+      this.voteItems = itemRes.data || []
+      const existingWorkIds = this.voteItems.map(item => item.workId)
+      this.availableWorks = (workRes.data.records || []).filter(w => w.status === 1 && !existingWorkIds.includes(w.id))
     },
     async addItem() {
       await this.$request.post('/api/vote-item', { voteId: this.currentVoteId, workId: this.selectedWorkId })
       this.$message.success('添加成功')
       this.selectedWorkId = null
-      const res = await this.$request.get(`/api/vote-item/list/${this.currentVoteId}`)
-      this.voteItems = res.data || []
+      await this.refreshItems()
     },
     async deleteItem(id) {
       await this.$request.delete(`/api/vote-item/${id}`)
       this.$message.success('移除成功')
-      const res = await this.$request.get(`/api/vote-item/list/${this.currentVoteId}`)
-      this.voteItems = res.data || []
+      await this.refreshItems()
     },
     async deleteRow(id) {
       await this.$request.delete(`/api/vote/${id}`)
