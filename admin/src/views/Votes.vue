@@ -43,10 +43,12 @@
       </span>
     </el-dialog>
 
-    <el-dialog title="管理投票选项" :visible.sync="itemDialogVisible" width="700px">
-      <div style="margin-bottom:10px">
-        <el-input v-model="newWorkId" placeholder="作品ID" style="width:200px;margin-right:10px"></el-input>
-        <el-button type="primary" @click="addItem">添加作品</el-button>
+    <el-dialog title="管理投票选项" :visible.sync="itemDialogVisible" width="750px">
+      <div style="margin-bottom:15px;display:flex;align-items:center">
+        <el-select v-model="selectedWorkId" placeholder="选择要添加的作品" filterable style="width:350px;margin-right:10px">
+          <el-option v-for="w in availableWorks" :key="w.id" :label="w.title + ' - ' + (w.username||w.nickname||'未知')" :value="w.id"></el-option>
+        </el-select>
+        <el-button type="primary" @click="addItem" :disabled="!selectedWorkId">添加作品</el-button>
       </div>
       <el-table :data="voteItems" border>
         <el-table-column prop="workTitle" label="作品标题"></el-table-column>
@@ -66,7 +68,7 @@
 
 <script>
 export default {
-  data() { return { tableData: [], pageNum: 1, pageSize: 10, total: 0, dialogVisible: false, form: {}, itemDialogVisible: false, currentVoteId: null, voteItems: [], newWorkId: '' } },
+  data() { return { tableData: [], pageNum: 1, pageSize: 10, total: 0, dialogVisible: false, form: {}, itemDialogVisible: false, currentVoteId: null, voteItems: [], selectedWorkId: null, availableWorks: [] } },
   created() { this.loadData() },
   methods: {
     async loadData() {
@@ -93,22 +95,38 @@ export default {
     },
     async manageItems(row) {
       this.currentVoteId = row.id
-      const res = await this.$request.get(`/api/vote/${row.id}`)
-      this.voteItems = res.data.items
+      this.selectedWorkId = null
+      const [itemRes, workRes] = await Promise.all([
+        this.$request.get(`/api/vote/${row.id}`),
+        this.$request.get('/api/work/page', { params: { pageNum: 1, pageSize: 1000 } })
+      ])
+      this.voteItems = itemRes.data.items
+      const existingWorkIds = this.voteItems.map(item => item.workId)
+      this.availableWorks = (workRes.data.records || []).filter(w => !existingWorkIds.includes(w.id))
       this.itemDialogVisible = true
     },
     async addItem() {
-      if (!this.newWorkId) return
-      await this.$request.post('/api/vote/item', { voteId: this.currentVoteId, workId: parseInt(this.newWorkId) })
-      this.$message.success('添加成功'); this.newWorkId = ''
-      const res = await this.$request.get(`/api/vote/${this.currentVoteId}`)
-      this.voteItems = res.data.items
+      if (!this.selectedWorkId) { this.$message.warning('请选择作品'); return }
+      await this.$request.post('/api/vote/item', { voteId: this.currentVoteId, workId: this.selectedWorkId })
+      this.$message.success('添加成功'); this.selectedWorkId = null
+      const [itemRes, workRes] = await Promise.all([
+        this.$request.get(`/api/vote/${this.currentVoteId}`),
+        this.$request.get('/api/work/page', { params: { pageNum: 1, pageSize: 1000 } })
+      ])
+      this.voteItems = itemRes.data.items
+      const existingWorkIds = this.voteItems.map(item => item.workId)
+      this.availableWorks = (workRes.data.records || []).filter(w => !existingWorkIds.includes(w.id))
     },
     async deleteItem(id) {
       await this.$request.delete(`/api/vote/item/${id}`)
       this.$message.success('移除成功')
-      const res = await this.$request.get(`/api/vote/${this.currentVoteId}`)
-      this.voteItems = res.data.items
+      const [itemRes, workRes] = await Promise.all([
+        this.$request.get(`/api/vote/${this.currentVoteId}`),
+        this.$request.get('/api/work/page', { params: { pageNum: 1, pageSize: 1000 } })
+      ])
+      this.voteItems = itemRes.data.items
+      const existingWorkIds = this.voteItems.map(item => item.workId)
+      this.availableWorks = (workRes.data.records || []).filter(w => !existingWorkIds.includes(w.id))
     }
   }
 }

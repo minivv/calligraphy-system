@@ -6,6 +6,8 @@ import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
 import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
+import java.io.File;
+
 @Configuration
 public class WebMvcConfig implements WebMvcConfigurer {
 
@@ -14,8 +16,13 @@ public class WebMvcConfig implements WebMvcConfigurer {
 
     @Override
     public void addResourceHandlers(ResourceHandlerRegistry registry) {
+        File uploadDir = new File(uploadPath);
+        if (!uploadDir.isAbsolute()) {
+            uploadDir = new File(System.getProperty("user.dir"), uploadPath);
+        }
+        String absolutePath = uploadDir.getAbsolutePath() + File.separator;
         registry.addResourceHandler("/upload/**")
-                .addResourceLocations("file:" + uploadPath);
+                .addResourceLocations("file:" + absolutePath);
     }
 
     @Override

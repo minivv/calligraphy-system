@@ -16,10 +16,12 @@ public interface VideoMapper extends BaseMapper<Video> {
             "<where>" +
             "<if test='title != null and title != \"\"'> AND v.title LIKE CONCAT('%',#{title},'%')</if>" +
             "<if test='userId != null'> AND v.user_id = #{userId}</if>" +
+            "<if test='status != null'> AND v.status = #{status}</if>" +
             "</where>" +
             " ORDER BY v.create_time DESC" +
             "</script>")
     IPage<Video> selectPageWithUser(Page<Video> page,
                                      @Param("title") String title,
-                                     @Param("userId") Long userId);
+                                     @Param("userId") Long userId,
+                                     @Param("status") Integer status);
 }

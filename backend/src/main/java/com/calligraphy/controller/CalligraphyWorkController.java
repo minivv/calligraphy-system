@@ -24,7 +24,7 @@ public class CalligraphyWorkController {
                           @RequestParam(required = false) String category,
                           @RequestParam(required = false) Long userId) {
         IPage<CalligraphyWork> page = workMapper.selectPageWithUser(
-                new Page<>(pageNum, pageSize), title, category, userId);
+                new Page<>(pageNum, pageSize), title, category, userId, null);
         return Result.success(page);
     }
 

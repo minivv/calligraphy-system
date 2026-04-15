@@ -90,6 +90,43 @@ public class UserController {
         return Result.success(page);
     }
 
+    @PutMapping("/admin-update")
+    public Result<?> adminUpdate(@RequestBody User user, HttpServletRequest request) {
+        String role = (String) request.getAttribute("role");
+        if (!Constants.ROLE_ADMIN.equals(role)) {
+            return Result.error("无权限操作");
+        }
+        if (user.getPassword() != null && !user.getPassword().isEmpty()) {
+            user.setPassword(SecureUtil.md5(user.getPassword()));
+        } else {
+            user.setPassword(null);
+        }
+        userMapper.updateById(user);
+        return Result.success("更新成功", null);
+    }
+
+    @PostMapping("/admin-add")
+    public Result<?> adminAdd(@RequestBody User user, HttpServletRequest request) {
+        String role = (String) request.getAttribute("role");
+        if (!Constants.ROLE_ADMIN.equals(role)) {
+            return Result.error("无权限操作");
+        }
+        User exist = userMapper.selectOne(new QueryWrapper<User>()
+                .eq("username", user.getUsername()));
+        if (exist != null) {
+            return Result.error("用户名已存在");
+        }
+        user.setPassword(SecureUtil.md5(user.getPassword()));
+        if (user.getStatus() == null) {
+            user.setStatus(1);
+        }
+        if (user.getNickname() == null || user.getNickname().isEmpty()) {
+            user.setNickname(user.getUsername());
+        }
+        userMapper.insert(user);
+        return Result.success("添加成功", null);
+    }
+
     @PutMapping("/status/{id}")
     public Result<?> updateStatus(@PathVariable Long id, @RequestParam Integer status) {
         User user = new User();
