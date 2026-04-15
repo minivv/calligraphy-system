@@ -34,8 +34,7 @@ public class WebMvcConfig implements WebMvcConfigurer {
                         "/api/user/register",
                         "/api/admin/login",
                         "/api/file/upload",
-                        "/api/front/**",
-                        "/api/stats/**"
+                        "/api/front/**"
                 );
     }
 }

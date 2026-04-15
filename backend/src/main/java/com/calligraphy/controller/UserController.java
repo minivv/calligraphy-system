@@ -91,7 +91,11 @@ public class UserController {
     }
 
     @PutMapping("/admin-update")
-    public Result<?> adminUpdate(@RequestBody User user) {
+    public Result<?> adminUpdate(@RequestBody User user, HttpServletRequest request) {
+        String role = (String) request.getAttribute("role");
+        if (!Constants.ROLE_ADMIN.equals(role)) {
+            return Result.error("无权限操作");
+        }
         if (user.getPassword() != null && !user.getPassword().isEmpty()) {
             user.setPassword(SecureUtil.md5(user.getPassword()));
         } else {
@@ -102,7 +106,11 @@ public class UserController {
     }
 
     @PostMapping("/admin-add")
-    public Result<?> adminAdd(@RequestBody User user) {
+    public Result<?> adminAdd(@RequestBody User user, HttpServletRequest request) {
+        String role = (String) request.getAttribute("role");
+        if (!Constants.ROLE_ADMIN.equals(role)) {
+            return Result.error("无权限操作");
+        }
         User exist = userMapper.selectOne(new QueryWrapper<User>()
                 .eq("username", user.getUsername()));
         if (exist != null) {
