@@ -34,13 +34,13 @@ public class FrontController {
     public Result<?> home() {
         Map<String, Object> result = new HashMap<>();
         IPage<CalligraphyWork> works = workMapper.selectPageWithUser(
-                new Page<>(1, 8), null, null, null);
+                new Page<>(1, 8), null, null, null, 1);
         result.put("works", works.getRecords());
         IPage<Activity> activities = activityMapper.selectPageWithAdmin(
                 new Page<>(1, 6), null, null);
         result.put("activities", activities.getRecords());
         IPage<Video> videos = videoMapper.selectPageWithUser(
-                new Page<>(1, 6), null, null);
+                new Page<>(1, 6), null, null, 1);
         result.put("videos", videos.getRecords());
         return Result.success(result);
     }
@@ -51,17 +51,17 @@ public class FrontController {
                                @RequestParam(required = false) String title,
                                @RequestParam(required = false) String category) {
         IPage<CalligraphyWork> page = workMapper.selectPageWithUser(
-                new Page<>(pageNum, pageSize), title, category, null);
+                new Page<>(pageNum, pageSize), title, category, null, 1);
         return Result.success(page);
     }
 
     @GetMapping("/work/{id}")
     public Result<?> workDetail(@PathVariable Long id) {
         CalligraphyWork work = workMapper.selectById(id);
-        if (work == null) {
+        if (work == null || work.getStatus() != 1) {
             return Result.error("作品不存在");
         }
-        IPage<CalligraphyWork> page = workMapper.selectPageWithUser(new Page<>(1, 1000), null, null, work.getUserId());
+        IPage<CalligraphyWork> page = workMapper.selectPageWithUser(new Page<>(1, 1000), null, null, work.getUserId(), 1);
         for (CalligraphyWork w : page.getRecords()) {
             if (w.getId().equals(id)) {
                 return Result.success(w);
@@ -91,17 +91,17 @@ public class FrontController {
                                 @RequestParam(defaultValue = "12") Integer pageSize,
                                 @RequestParam(required = false) String title) {
         IPage<Video> page = videoMapper.selectPageWithUser(
-                new Page<>(pageNum, pageSize), title, null);
+                new Page<>(pageNum, pageSize), title, null, 1);
         return Result.success(page);
     }
 
     @GetMapping("/video/{id}")
     public Result<?> videoDetail(@PathVariable Long id) {
         Video video = videoMapper.selectById(id);
-        if (video == null) {
+        if (video == null || video.getStatus() != 1) {
             return Result.error("视频不存在");
         }
-        IPage<Video> page = videoMapper.selectPageWithUser(new Page<>(1, 1000), null, video.getUserId());
+        IPage<Video> page = videoMapper.selectPageWithUser(new Page<>(1, 1000), null, video.getUserId(), 1);
         for (Video v : page.getRecords()) {
             if (v.getId().equals(id)) {
                 return Result.success(v);

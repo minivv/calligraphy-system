@@ -23,7 +23,7 @@ public class VideoController {
                           @RequestParam(required = false) String title,
                           @RequestParam(required = false) Long userId) {
         IPage<Video> page = videoMapper.selectPageWithUser(
-                new Page<>(pageNum, pageSize), title, userId);
+                new Page<>(pageNum, pageSize), title, userId, null);
         return Result.success(page);
     }
 

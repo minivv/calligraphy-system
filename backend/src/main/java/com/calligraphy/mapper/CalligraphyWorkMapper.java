@@ -17,11 +17,13 @@ public interface CalligraphyWorkMapper extends BaseMapper<CalligraphyWork> {
             "<if test='title != null and title != \"\"'> AND w.title LIKE CONCAT('%',#{title},'%')</if>" +
             "<if test='category != null and category != \"\"'> AND w.category = #{category}</if>" +
             "<if test='userId != null'> AND w.user_id = #{userId}</if>" +
+            "<if test='status != null'> AND w.status = #{status}</if>" +
             "</where>" +
             " ORDER BY w.create_time DESC" +
             "</script>")
     IPage<CalligraphyWork> selectPageWithUser(Page<CalligraphyWork> page,
                                                @Param("title") String title,
                                                @Param("category") String category,
-                                               @Param("userId") Long userId);
+                                               @Param("userId") Long userId,
+                                               @Param("status") Integer status);
 }
