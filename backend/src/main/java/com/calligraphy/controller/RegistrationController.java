@@ -72,12 +72,16 @@ public class RegistrationController {
         // Update activity participant count based on status transitions
         if (status == 1 && oldStatus != 1) {
             Activity activity = activityMapper.selectById(reg.getActivityId());
-            activity.setCurrentParticipants(activity.getCurrentParticipants() + 1);
-            activityMapper.updateById(activity);
+            if (activity != null) {
+                activity.setCurrentParticipants(activity.getCurrentParticipants() + 1);
+                activityMapper.updateById(activity);
+            }
         } else if (oldStatus == 1 && status != 1) {
             Activity activity = activityMapper.selectById(reg.getActivityId());
-            activity.setCurrentParticipants(Math.max(0, activity.getCurrentParticipants() - 1));
-            activityMapper.updateById(activity);
+            if (activity != null) {
+                activity.setCurrentParticipants(Math.max(0, activity.getCurrentParticipants() - 1));
+                activityMapper.updateById(activity);
+            }
         }
         return Result.success();
     }
