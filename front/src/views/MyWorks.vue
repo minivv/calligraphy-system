@@ -1,18 +1,18 @@
 <template>
   <div>
-    <el-card>
-      <div slot="header">
-        <span style="font-size:18px;font-weight:bold">我的作品</span>
-        <el-button type="primary" size="small" style="float:right" @click="openDialog(null)">发布作品</el-button>
+    <div class="page-card">
+      <div class="card-header">
+        <h2 class="card-title">我的作品</h2>
+        <el-button type="primary" size="small" @click="openDialog(null)">发布作品</el-button>
       </div>
-      <el-table :data="tableData" border stripe>
+      <el-table :data="tableData" stripe style="width:100%">
         <el-table-column prop="id" label="ID" width="80"></el-table-column>
         <el-table-column prop="title" label="标题" min-width="150"></el-table-column>
         <el-table-column prop="category" label="类别" width="100"></el-table-column>
         <el-table-column label="图片" width="100">
           <template slot-scope="scope">
-            <el-image v-if="scope.row.imageUrl" :src="scope.row.imageUrl" style="width:60px;height:60px" fit="cover"></el-image>
-            <span v-else>-</span>
+            <el-image v-if="scope.row.imageUrl" :src="scope.row.imageUrl" style="width:60px;height:60px;border-radius:8px" fit="cover"></el-image>
+            <span v-else class="text-muted">-</span>
           </template>
         </el-table-column>
         <el-table-column prop="likeCount" label="点赞" width="80"></el-table-column>
@@ -22,13 +22,15 @@
           <template slot-scope="scope">
             <el-button type="text" @click="openDialog(scope.row)">编辑</el-button>
             <el-popconfirm title="确定删除？" @confirm="deleteRow(scope.row.id)">
-              <el-button slot="reference" type="text" style="color:#F56C6C">删除</el-button>
+              <el-button slot="reference" type="text" style="color:var(--color-danger)">删除</el-button>
             </el-popconfirm>
           </template>
         </el-table-column>
       </el-table>
-      <el-pagination style="margin-top:15px" @current-change="handlePage" :current-page="pageNum" :page-size="pageSize" :total="total" layout="total, prev, pager, next"></el-pagination>
-    </el-card>
+      <div class="pagination-wrap">
+        <el-pagination @current-change="handlePage" :current-page="pageNum" :page-size="pageSize" :total="total" layout="total, prev, pager, next"></el-pagination>
+      </div>
+    </div>
 
     <el-dialog :title="form.id?'编辑作品':'发布作品'" :visible.sync="dialogVisible" width="600px">
       <el-form :model="form" label-width="80px">
@@ -41,7 +43,7 @@
         <el-form-item label="描述"><el-input v-model="form.description" type="textarea" :rows="4"></el-input></el-form-item>
         <el-form-item label="作品图片">
           <el-upload action="/api/file/upload" :show-file-list="false" :on-success="handleUpload" :headers="uploadHeaders">
-            <el-image v-if="form.imageUrl" :src="form.imageUrl" style="width:200px;height:150px" fit="cover"></el-image>
+            <el-image v-if="form.imageUrl" :src="form.imageUrl" style="width:200px;height:150px;border-radius:12px" fit="cover"></el-image>
             <el-button v-else size="small" type="primary">上传图片</el-button>
           </el-upload>
         </el-form-item>
@@ -88,3 +90,32 @@ export default {
   }
 }
 </script>
+
+<style scoped>
+.page-card {
+  background: var(--color-surface);
+  border-radius: var(--radius-card);
+  border: 1px solid var(--color-border);
+  box-shadow: var(--shadow-soft);
+  padding: 32px;
+}
+.card-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 24px;
+}
+.card-title {
+  font-size: 24px;
+  font-weight: 400;
+  color: var(--color-text);
+  letter-spacing: 0.12px;
+}
+.text-muted {
+  color: var(--color-text-muted);
+}
+.pagination-wrap {
+  text-align: center;
+  margin-top: 20px;
+}
+</style>

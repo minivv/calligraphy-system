@@ -1,38 +1,41 @@
 <template>
   <div>
-    <el-card>
-      <div slot="header">
-        <span style="font-size:18px;font-weight:bold">书法作品</span>
+    <div class="page-header">
+      <h2 class="page-title">书法作品</h2>
+      <div class="search-bar">
+        <el-input v-model="query.title" placeholder="搜索作品" clearable prefix-icon="el-icon-search" style="width:220px" @keyup.enter.native="loadData"></el-input>
+        <el-select v-model="query.category" placeholder="类别" clearable style="width:140px">
+          <el-option v-for="c in categories" :key="c" :label="c" :value="c"></el-option>
+        </el-select>
+        <el-button type="primary" @click="loadData">搜索</el-button>
       </div>
-      <el-form :inline="true">
-        <el-form-item><el-input v-model="query.title" placeholder="搜索作品" clearable></el-input></el-form-item>
-        <el-form-item>
-          <el-select v-model="query.category" placeholder="类别" clearable>
-            <el-option v-for="c in categories" :key="c" :label="c" :value="c"></el-option>
-          </el-select>
-        </el-form-item>
-        <el-form-item><el-button type="primary" @click="loadData">搜索</el-button></el-form-item>
-      </el-form>
-      <el-row :gutter="20">
-        <el-col :span="6" v-for="item in list" :key="item.id">
-          <el-card shadow="hover" class="item-card" @click.native="$router.push('/work/'+item.id)">
-            <el-image v-if="item.imageUrl" :src="item.imageUrl" style="width:100%;height:180px" fit="cover"></el-image>
-            <div v-else style="width:100%;height:180px;background:#f0f0f0;display:flex;align-items:center;justify-content:center;color:#999">
-              <i class="el-icon-picture" style="font-size:40px"></i>
+    </div>
+    <el-row :gutter="24">
+      <el-col :span="6" v-for="item in list" :key="item.id">
+        <div class="work-card" @click="$router.push('/work/'+item.id)">
+          <div class="work-card-cover">
+            <el-image v-if="item.imageUrl" :src="item.imageUrl" style="width:100%;height:100%" fit="cover"></el-image>
+            <div v-else class="work-card-placeholder">
+              <i class="el-icon-picture"></i>
             </div>
-            <div style="padding:10px">
-              <h4 class="ellipsis">{{ item.title }}</h4>
-              <el-tag size="mini" style="margin-top:5px">{{ item.category }}</el-tag>
-              <div style="display:flex;justify-content:space-between;color:#999;font-size:12px;margin-top:5px">
-                <span>{{ item.nickname || item.username }}</span>
-                <span><i class="el-icon-thumb"></i> {{ item.likeCount }} <i class="el-icon-chat-dot-round"></i> {{ item.commentCount }}</span>
-              </div>
+          </div>
+          <div class="work-card-body">
+            <h4 class="work-card-title">{{ item.title }}</h4>
+            <el-tag size="mini" effect="plain" style="margin-top:6px">{{ item.category }}</el-tag>
+            <div class="work-card-meta">
+              <span class="meta-author">{{ item.nickname || item.username }}</span>
+              <span class="meta-stat">
+                <i class="el-icon-thumb"></i> {{ item.likeCount }}
+                <i class="el-icon-chat-dot-round" style="margin-left:8px"></i> {{ item.commentCount }}
+              </span>
             </div>
-          </el-card>
-        </el-col>
-      </el-row>
-      <el-pagination style="text-align:center;margin-top:20px" @current-change="handlePage" :current-page="pageNum" :page-size="pageSize" :total="total" layout="prev, pager, next"></el-pagination>
-    </el-card>
+          </div>
+        </div>
+      </el-col>
+    </el-row>
+    <div class="pagination-wrap">
+      <el-pagination @current-change="handlePage" :current-page="pageNum" :page-size="pageSize" :total="total" layout="prev, pager, next"></el-pagination>
+    </div>
   </div>
 </template>
 
@@ -51,7 +54,80 @@ export default {
 </script>
 
 <style scoped>
-.item-card { cursor:pointer; margin-bottom:15px; }
-.item-card:hover { transform:translateY(-3px); transition:0.3s; }
-.ellipsis { overflow:hidden; text-overflow:ellipsis; white-space:nowrap; }
+.page-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 24px;
+}
+.page-title {
+  font-size: 24px;
+  font-weight: 400;
+  color: var(--color-text);
+  letter-spacing: 0.12px;
+}
+.search-bar {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.work-card {
+  background: var(--color-surface);
+  border-radius: var(--radius-card);
+  border: 1px solid var(--color-border);
+  overflow: hidden;
+  cursor: pointer;
+  transition: transform 0.25s ease, box-shadow 0.25s ease;
+  box-shadow: var(--shadow-soft);
+  margin-bottom: 24px;
+}
+.work-card:hover {
+  transform: translateY(-4px);
+  box-shadow: var(--shadow-hover);
+}
+.work-card-cover {
+  width: 100%;
+  height: 200px;
+  overflow: hidden;
+  background: var(--color-surface-subtle);
+}
+.work-card-placeholder {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--color-border);
+  font-size: 40px;
+}
+.work-card-body { padding: 16px; }
+.work-card-title {
+  font-size: 16px;
+  font-weight: 500;
+  color: var(--color-text);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  letter-spacing: 0.08px;
+}
+.work-card-meta {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: 10px;
+}
+.meta-author {
+  font-size: 13px;
+  color: var(--color-text-weak);
+  letter-spacing: var(--letter-spacing-caption);
+}
+.meta-stat {
+  font-size: 13px;
+  color: var(--color-text-muted);
+  letter-spacing: var(--letter-spacing-caption);
+}
+.pagination-wrap {
+  text-align: center;
+  margin-top: 16px;
+}
 </style>

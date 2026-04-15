@@ -1,39 +1,41 @@
 <template>
   <div>
-    <el-card>
-      <div slot="header"><span style="font-size:18px;font-weight:bold">交流活动</span></div>
-      <el-form :inline="true">
-        <el-form-item><el-input v-model="query.title" placeholder="搜索活动" clearable></el-input></el-form-item>
-        <el-form-item>
-          <el-select v-model="query.status" placeholder="状态" clearable>
-            <el-option label="未开始" :value="0"></el-option>
-            <el-option label="进行中" :value="1"></el-option>
-            <el-option label="已结束" :value="2"></el-option>
-          </el-select>
-        </el-form-item>
-        <el-form-item><el-button type="primary" @click="loadData">搜索</el-button></el-form-item>
-      </el-form>
-      <el-row :gutter="20">
-        <el-col :span="8" v-for="item in list" :key="item.id">
-          <el-card shadow="hover" class="item-card" @click.native="$router.push('/activity/'+item.id)">
-            <el-image v-if="item.coverImage" :src="item.coverImage" style="width:100%;height:180px" fit="cover"></el-image>
-            <div v-else style="width:100%;height:180px;background:linear-gradient(135deg,#667eea,#764ba2);display:flex;align-items:center;justify-content:center;color:#fff">
-              <i class="el-icon-date" style="font-size:50px"></i>
+    <div class="page-header">
+      <h2 class="page-title">交流活动</h2>
+      <div class="search-bar">
+        <el-input v-model="query.title" placeholder="搜索活动" clearable prefix-icon="el-icon-search" style="width:220px" @keyup.enter.native="loadData"></el-input>
+        <el-select v-model="query.status" placeholder="状态" clearable style="width:140px">
+          <el-option label="未开始" :value="0"></el-option>
+          <el-option label="进行中" :value="1"></el-option>
+          <el-option label="已结束" :value="2"></el-option>
+        </el-select>
+        <el-button type="primary" @click="loadData">搜索</el-button>
+      </div>
+    </div>
+    <el-row :gutter="24">
+      <el-col :span="8" v-for="item in list" :key="item.id">
+        <div class="activity-card" @click="$router.push('/activity/'+item.id)">
+          <div class="activity-card-cover">
+            <el-image v-if="item.coverImage" :src="item.coverImage" style="width:100%;height:100%" fit="cover"></el-image>
+            <div v-else class="activity-card-cover-fallback">
+              <i class="el-icon-date"></i>
             </div>
-            <div style="padding:15px">
-              <h4 class="ellipsis">{{ item.title }}</h4>
-              <p style="color:#999;font-size:13px;margin:5px 0"><i class="el-icon-location"></i> {{ item.location }}</p>
-              <p style="color:#999;font-size:13px"><i class="el-icon-time"></i> {{ item.startTime }}</p>
-              <div style="margin-top:8px;display:flex;justify-content:space-between;align-items:center">
-                <el-tag size="mini" :type="['info','success','danger'][item.status]">{{ ['未开始','进行中','已结束'][item.status] }}</el-tag>
-                <span style="color:#999;font-size:12px">{{ item.currentParticipants }}/{{ item.maxParticipants }}人</span>
-              </div>
+          </div>
+          <div class="activity-card-body">
+            <h4 class="activity-card-title">{{ item.title }}</h4>
+            <p class="activity-card-info"><i class="el-icon-location-outline"></i> {{ item.location }}</p>
+            <p class="activity-card-info"><i class="el-icon-time"></i> {{ item.startTime }}</p>
+            <div class="activity-card-footer">
+              <el-tag size="mini" :type="['info','success','danger'][item.status]" effect="plain">{{ ['未开始','进行中','已结束'][item.status] }}</el-tag>
+              <span class="meta-stat">{{ item.currentParticipants }}/{{ item.maxParticipants }}人</span>
             </div>
-          </el-card>
-        </el-col>
-      </el-row>
-      <el-pagination style="text-align:center;margin-top:20px" @current-change="handlePage" :current-page="pageNum" :page-size="pageSize" :total="total" layout="prev, pager, next"></el-pagination>
-    </el-card>
+          </div>
+        </div>
+      </el-col>
+    </el-row>
+    <div class="pagination-wrap">
+      <el-pagination @current-change="handlePage" :current-page="pageNum" :page-size="pageSize" :total="total" layout="prev, pager, next"></el-pagination>
+    </div>
   </div>
 </template>
 
@@ -52,7 +54,86 @@ export default {
 </script>
 
 <style scoped>
-.item-card { cursor:pointer; margin-bottom:15px; }
-.item-card:hover { transform:translateY(-3px); transition:0.3s; }
-.ellipsis { overflow:hidden; text-overflow:ellipsis; white-space:nowrap; }
+.page-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 24px;
+}
+.page-title {
+  font-size: 24px;
+  font-weight: 400;
+  color: var(--color-text);
+  letter-spacing: 0.12px;
+}
+.search-bar {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.activity-card {
+  background: var(--color-surface);
+  border-radius: var(--radius-card);
+  border: 1px solid var(--color-border);
+  overflow: hidden;
+  cursor: pointer;
+  transition: transform 0.25s ease, box-shadow 0.25s ease;
+  box-shadow: var(--shadow-soft);
+  margin-bottom: 24px;
+}
+.activity-card:hover {
+  transform: translateY(-4px);
+  box-shadow: var(--shadow-hover);
+}
+.activity-card-cover {
+  width: 100%;
+  height: 200px;
+  overflow: hidden;
+}
+.activity-card-cover-fallback {
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(135deg, #1b61c9, #254fad);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: rgba(255,255,255,0.7);
+  font-size: 48px;
+}
+.activity-card-body { padding: 20px; }
+.activity-card-title {
+  font-size: 18px;
+  font-weight: 500;
+  color: var(--color-text);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  margin-bottom: 10px;
+  letter-spacing: 0.1px;
+}
+.activity-card-info {
+  font-size: 13px;
+  color: var(--color-text-weak);
+  margin-bottom: 6px;
+  letter-spacing: var(--letter-spacing-caption);
+}
+.activity-card-info i {
+  margin-right: 4px;
+  color: var(--color-text-muted);
+}
+.activity-card-footer {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: 12px;
+}
+.meta-stat {
+  font-size: 13px;
+  color: var(--color-text-muted);
+  letter-spacing: var(--letter-spacing-caption);
+}
+.pagination-wrap {
+  text-align: center;
+  margin-top: 16px;
+}
 </style>
