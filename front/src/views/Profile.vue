@@ -14,8 +14,8 @@
         <el-form-item label="手机号"><el-input v-model="form.phone"></el-input></el-form-item>
         <el-form-item label="性别">
           <el-radio-group v-model="form.gender">
-            <el-radio :label="1">男</el-radio>
-            <el-radio :label="2">女</el-radio>
+            <el-radio label="男">男</el-radio>
+            <el-radio label="女">女</el-radio>
           </el-radio-group>
         </el-form-item>
         <el-form-item><el-button type="primary" @click="saveProfile">保存</el-button></el-form-item>
@@ -43,7 +43,7 @@ export default {
     }
   },
   methods: {
-    onAvatarSuccess(res) { if (res.code === '200') this.form.avatar = res.data },
+    onAvatarSuccess(res) { if (res.code === 200) this.form.avatar = res.data },
     async saveProfile() {
       await this.$request.put('/api/user', this.form)
       const user = JSON.parse(localStorage.getItem('user') || '{}')

@@ -76,7 +76,7 @@ export default {
     },
     handlePage(val) { this.pageNum = val; this.loadData() },
     openDialog(row) { this.form = row ? { ...row } : { title: '', category: '', description: '', imageUrl: '' }; this.dialogVisible = true },
-    onUploadSuccess(res) { if (res.code === '200') this.form.imageUrl = res.data },
+    onUploadSuccess(res) { if (res.code === 200) this.form.imageUrl = res.data },
     async saveWork() {
       if (this.form.id) { await this.$request.put('/api/work', this.form) } else { await this.$request.post('/api/work', this.form) }
       this.$message.success('保存成功'); this.dialogVisible = false; this.loadData()
