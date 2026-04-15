@@ -1,7 +1,10 @@
 <template>
-  <div class="login-container">
-    <div class="login-box">
-      <h2>用户注册</h2>
+  <div class="auth-container">
+    <div class="auth-card">
+      <div class="auth-header">
+        <h2 class="auth-title">创建账号</h2>
+        <p class="auth-subtitle">加入书法交流平台</p>
+      </div>
       <el-form :model="form" :rules="rules" ref="regForm">
         <el-form-item prop="username">
           <el-input v-model="form.username" prefix-icon="el-icon-user" placeholder="请输入用户名"></el-input>
@@ -24,8 +27,8 @@
         <el-form-item>
           <el-button type="primary" style="width:100%" @click="register" :loading="loading">注 册</el-button>
         </el-form-item>
-        <div style="text-align:center">
-          <router-link to="/login" style="color:#409EFF">已有账号？去登录</router-link>
+        <div class="auth-footer">
+          <router-link to="/login">已有账号？去登录</router-link>
         </div>
       </el-form>
     </div>
@@ -71,12 +74,46 @@ export default {
 </script>
 
 <style scoped>
-.login-container {
-  height: 100vh; display: flex; align-items: center; justify-content: center;
-  background: linear-gradient(135deg, #2c3e50 0%, #4ca1af 100%);
+.auth-container {
+  height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: linear-gradient(135deg, #0d1b3e 0%, #1b61c9 50%, #254fad 100%);
 }
-.login-box {
-  width: 450px; padding: 40px; background: #fff; border-radius: 10px; box-shadow: 0 10px 40px rgba(0,0,0,0.2);
+.auth-card {
+  width: 460px;
+  padding: 48px 40px;
+  background: var(--color-surface);
+  border-radius: var(--radius-section);
+  box-shadow: var(--shadow-card);
 }
-.login-box h2 { text-align: center; margin-bottom: 30px; color: #333; }
+.auth-header {
+  text-align: center;
+  margin-bottom: 32px;
+}
+.auth-title {
+  font-size: 24px;
+  font-weight: 600;
+  color: var(--color-text);
+  letter-spacing: 0.12px;
+  margin-bottom: 8px;
+}
+.auth-subtitle {
+  font-size: 15px;
+  color: var(--color-text-weak);
+  letter-spacing: var(--letter-spacing-body);
+}
+.auth-footer {
+  text-align: center;
+  margin-top: 4px;
+}
+.auth-footer a {
+  font-size: 14px;
+  color: var(--color-primary);
+  letter-spacing: var(--letter-spacing-caption);
+}
+.auth-footer a:hover {
+  color: var(--color-primary-hover);
+}
 </style>

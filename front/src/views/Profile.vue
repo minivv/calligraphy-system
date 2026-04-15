@@ -1,8 +1,10 @@
 <template>
   <div>
-    <el-card>
-      <div slot="header"><span style="font-size:18px;font-weight:bold">个人中心</span></div>
-      <el-form :model="form" label-width="80px" style="max-width:500px">
+    <div class="profile-card">
+      <div class="card-header">
+        <h2 class="card-title">个人中心</h2>
+      </div>
+      <el-form :model="form" label-width="80px" class="profile-form">
         <el-form-item label="用户名">
           <el-input v-model="form.username" disabled></el-input>
         </el-form-item>
@@ -32,9 +34,9 @@
         </el-form-item>
       </el-form>
 
-      <el-divider></el-divider>
-      <h3 style="margin-bottom:15px">修改密码</h3>
-      <el-form :model="pwdForm" label-width="80px" style="max-width:500px">
+      <div class="section-divider"></div>
+      <h3 class="sub-title">修改密码</h3>
+      <el-form :model="pwdForm" label-width="80px" class="profile-form">
         <el-form-item label="新密码">
           <el-input v-model="pwdForm.password" type="password"></el-input>
         </el-form-item>
@@ -45,7 +47,7 @@
           <el-button type="warning" @click="changePassword">修改密码</el-button>
         </el-form-item>
       </el-form>
-    </el-card>
+    </div>
   </div>
 </template>
 
@@ -72,7 +74,6 @@ export default {
     },
     async saveProfile() {
       await this.$request.put('/api/user/update', this.form)
-      // Update local storage
       const user = JSON.parse(localStorage.getItem('user') || '{}')
       Object.assign(user, { nickname: this.form.nickname, avatar: this.form.avatar })
       localStorage.setItem('user', JSON.stringify(user))
@@ -87,3 +88,37 @@ export default {
   }
 }
 </script>
+
+<style scoped>
+.profile-card {
+  background: var(--color-surface);
+  border-radius: var(--radius-card);
+  border: 1px solid var(--color-border);
+  box-shadow: var(--shadow-soft);
+  padding: 32px;
+}
+.card-header {
+  margin-bottom: 24px;
+}
+.card-title {
+  font-size: 24px;
+  font-weight: 400;
+  color: var(--color-text);
+  letter-spacing: 0.12px;
+}
+.profile-form {
+  max-width: 500px;
+}
+.section-divider {
+  height: 1px;
+  background: var(--color-border-light);
+  margin: 32px 0;
+}
+.sub-title {
+  font-size: 18px;
+  font-weight: 500;
+  color: var(--color-text);
+  margin-bottom: 20px;
+  letter-spacing: 0.1px;
+}
+</style>

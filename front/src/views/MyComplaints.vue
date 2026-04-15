@@ -1,24 +1,26 @@
 <template>
   <div>
-    <el-card>
-      <div slot="header">
-        <span style="font-size:18px;font-weight:bold">我的投诉</span>
-        <el-button type="primary" size="small" style="float:right" @click="openDialog">新建投诉</el-button>
+    <div class="page-card">
+      <div class="card-header">
+        <h2 class="card-title">我的投诉</h2>
+        <el-button type="primary" size="small" @click="openDialog">新建投诉</el-button>
       </div>
-      <el-table :data="tableData" border stripe>
+      <el-table :data="tableData" stripe style="width:100%">
         <el-table-column prop="id" label="ID" width="80"></el-table-column>
         <el-table-column prop="title" label="标题" min-width="120"></el-table-column>
         <el-table-column prop="content" label="内容" min-width="200" show-overflow-tooltip></el-table-column>
         <el-table-column label="状态" width="100">
           <template slot-scope="scope">
-            <el-tag :type="['warning','success','danger'][scope.row.status]">{{ ['待处理','已处理','已驳回'][scope.row.status] }}</el-tag>
+            <el-tag :type="['warning','success','danger'][scope.row.status]" effect="plain">{{ ['待处理','已处理','已驳回'][scope.row.status] }}</el-tag>
           </template>
         </el-table-column>
         <el-table-column prop="reply" label="处理回复" min-width="150" show-overflow-tooltip></el-table-column>
         <el-table-column prop="createTime" label="投诉时间" width="160"></el-table-column>
       </el-table>
-      <el-pagination style="margin-top:15px" @current-change="handlePage" :current-page="pageNum" :page-size="pageSize" :total="total" layout="total, prev, pager, next"></el-pagination>
-    </el-card>
+      <div class="pagination-wrap">
+        <el-pagination @current-change="handlePage" :current-page="pageNum" :page-size="pageSize" :total="total" layout="total, prev, pager, next"></el-pagination>
+      </div>
+    </div>
 
     <el-dialog title="新建投诉" :visible.sync="dialogVisible" width="500px">
       <el-form :model="form" label-width="80px">
@@ -55,3 +57,29 @@ export default {
   }
 }
 </script>
+
+<style scoped>
+.page-card {
+  background: var(--color-surface);
+  border-radius: var(--radius-card);
+  border: 1px solid var(--color-border);
+  box-shadow: var(--shadow-soft);
+  padding: 32px;
+}
+.card-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 24px;
+}
+.card-title {
+  font-size: 24px;
+  font-weight: 400;
+  color: var(--color-text);
+  letter-spacing: 0.12px;
+}
+.pagination-wrap {
+  text-align: center;
+  margin-top: 20px;
+}
+</style>
