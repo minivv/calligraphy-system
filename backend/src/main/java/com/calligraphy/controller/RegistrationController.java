@@ -66,12 +66,17 @@ public class RegistrationController {
         if (reg == null) {
             return Result.error("报名记录不存在");
         }
+        int oldStatus = reg.getStatus();
         reg.setStatus(status);
         registrationMapper.updateById(reg);
-        // Update activity participant count if approved
-        if (status == 1) {
+        // Update activity participant count based on status transitions
+        if (status == 1 && oldStatus != 1) {
             Activity activity = activityMapper.selectById(reg.getActivityId());
             activity.setCurrentParticipants(activity.getCurrentParticipants() + 1);
+            activityMapper.updateById(activity);
+        } else if (oldStatus == 1 && status != 1) {
+            Activity activity = activityMapper.selectById(reg.getActivityId());
+            activity.setCurrentParticipants(Math.max(0, activity.getCurrentParticipants() - 1));
             activityMapper.updateById(activity);
         }
         return Result.success();
@@ -84,8 +89,17 @@ public class RegistrationController {
         if (reg == null || !reg.getUserId().equals(userId)) {
             return Result.error("操作无效");
         }
+        int oldStatus = reg.getStatus();
         reg.setStatus(3);
         registrationMapper.updateById(reg);
+        // Decrement participant count if previously approved
+        if (oldStatus == 1) {
+            Activity activity = activityMapper.selectById(reg.getActivityId());
+            if (activity != null) {
+                activity.setCurrentParticipants(Math.max(0, activity.getCurrentParticipants() - 1));
+                activityMapper.updateById(activity);
+            }
+        }
         return Result.success("取消报名成功");
     }
 

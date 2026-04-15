@@ -58,6 +58,9 @@ public class FrontController {
     @GetMapping("/work/{id}")
     public Result<?> workDetail(@PathVariable Long id) {
         CalligraphyWork work = workMapper.selectById(id);
+        if (work == null) {
+            return Result.error("作品不存在");
+        }
         IPage<CalligraphyWork> page = workMapper.selectPageWithUser(new Page<>(1, 1000), null, null, work.getUserId());
         for (CalligraphyWork w : page.getRecords()) {
             if (w.getId().equals(id)) {
@@ -95,6 +98,9 @@ public class FrontController {
     @GetMapping("/video/{id}")
     public Result<?> videoDetail(@PathVariable Long id) {
         Video video = videoMapper.selectById(id);
+        if (video == null) {
+            return Result.error("视频不存在");
+        }
         IPage<Video> page = videoMapper.selectPageWithUser(new Page<>(1, 1000), null, video.getUserId());
         for (Video v : page.getRecords()) {
             if (v.getId().equals(id)) {
