@@ -22,7 +22,9 @@ public class FileController {
             return Result.error("文件不能为空");
         }
         String originalFilename = file.getOriginalFilename();
-        String suffix = originalFilename.substring(originalFilename.lastIndexOf("."));
+        String suffix = (originalFilename != null && originalFilename.lastIndexOf(".") > 0)
+                ? originalFilename.substring(originalFilename.lastIndexOf("."))
+                : "";
         String fileName = UUID.randomUUID().toString() + suffix;
         File dest = new File(uploadPath + fileName);
         if (!dest.getParentFile().exists()) {
