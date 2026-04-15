@@ -1,98 +1,61 @@
 <template>
   <div>
     <el-row :gutter="20">
-      <el-col :span="4">
-        <el-card shadow="hover">
-          <div class="stat-card">
-            <i class="el-icon-user" style="color:#409EFF"></i>
-            <div><p class="num">{{ stats.userCount }}</p><p class="label">用户数</p></div>
+      <el-col :span="4" v-for="(stat, idx) in statCards" :key="idx">
+        <div class="stat-card">
+          <div class="stat-icon" :style="{background: stat.bg}">
+            <i :class="stat.icon" :style="{color: stat.color}"></i>
           </div>
-        </el-card>
-      </el-col>
-      <el-col :span="4">
-        <el-card shadow="hover">
-          <div class="stat-card">
-            <i class="el-icon-picture" style="color:#67C23A"></i>
-            <div><p class="num">{{ stats.workCount }}</p><p class="label">作品数</p></div>
+          <div class="stat-info">
+            <p class="stat-num">{{ stat.value }}</p>
+            <p class="stat-label">{{ stat.label }}</p>
           </div>
-        </el-card>
-      </el-col>
-      <el-col :span="4">
-        <el-card shadow="hover">
-          <div class="stat-card">
-            <i class="el-icon-date" style="color:#E6A23C"></i>
-            <div><p class="num">{{ stats.activityCount }}</p><p class="label">活动数</p></div>
-          </div>
-        </el-card>
-      </el-col>
-      <el-col :span="4">
-        <el-card shadow="hover">
-          <div class="stat-card">
-            <i class="el-icon-video-camera" style="color:#F56C6C"></i>
-            <div><p class="num">{{ stats.videoCount }}</p><p class="label">视频数</p></div>
-          </div>
-        </el-card>
-      </el-col>
-      <el-col :span="4">
-        <el-card shadow="hover">
-          <div class="stat-card">
-            <i class="el-icon-tickets" style="color:#909399"></i>
-            <div><p class="num">{{ stats.registrationCount }}</p><p class="label">报名数</p></div>
-          </div>
-        </el-card>
-      </el-col>
-      <el-col :span="4">
-        <el-card shadow="hover">
-          <div class="stat-card">
-            <i class="el-icon-warning" style="color:#E6A23C"></i>
-            <div><p class="num">{{ stats.complaintCount }}</p><p class="label">投诉数</p></div>
-          </div>
-        </el-card>
+        </div>
       </el-col>
     </el-row>
 
-    <el-row :gutter="20" style="margin-top:20px">
+    <el-row :gutter="20" style="margin-top:24px">
       <el-col :span="12">
-        <el-card>
-          <div slot="header"><span>作品分类统计</span></div>
+        <div class="chart-card">
+          <div class="chart-header">作品分类统计</div>
           <div ref="chartWorkCategory" style="height:300px"></div>
-        </el-card>
+        </div>
       </el-col>
       <el-col :span="12">
-        <el-card>
-          <div slot="header"><span>活动状态分布</span></div>
+        <div class="chart-card">
+          <div class="chart-header">活动状态分布</div>
           <div ref="chartActivityStatus" style="height:300px"></div>
-        </el-card>
+        </div>
       </el-col>
     </el-row>
 
-    <el-row :gutter="20" style="margin-top:20px">
+    <el-row :gutter="20" style="margin-top:24px">
       <el-col :span="12">
-        <el-card>
-          <div slot="header"><span>报名审核状态</span></div>
+        <div class="chart-card">
+          <div class="chart-header">报名审核状态</div>
           <div ref="chartRegStatus" style="height:300px"></div>
-        </el-card>
+        </div>
       </el-col>
       <el-col :span="12">
-        <el-card>
-          <div slot="header"><span>投诉处理状态</span></div>
+        <div class="chart-card">
+          <div class="chart-header">投诉处理状态</div>
           <div ref="chartComplaintStatus" style="height:300px"></div>
-        </el-card>
+        </div>
       </el-col>
     </el-row>
 
-    <el-row :gutter="20" style="margin-top:20px">
+    <el-row :gutter="20" style="margin-top:24px">
       <el-col :span="12">
-        <el-card>
-          <div slot="header"><span>作品上下架状态</span></div>
+        <div class="chart-card">
+          <div class="chart-header">作品上下架状态</div>
           <div ref="chartWorkStatus" style="height:300px"></div>
-        </el-card>
+        </div>
       </el-col>
       <el-col :span="12">
-        <el-card>
-          <div slot="header"><span>作品点赞排行</span></div>
+        <div class="chart-card">
+          <div class="chart-header">作品点赞排行</div>
           <div ref="chartTopLiked" style="height:300px"></div>
-        </el-card>
+        </div>
       </el-col>
     </el-row>
   </div>
@@ -106,6 +69,18 @@ export default {
     return {
       stats: { userCount: 0, workCount: 0, activityCount: 0, videoCount: 0, registrationCount: 0, complaintCount: 0 },
       charts: []
+    }
+  },
+  computed: {
+    statCards() {
+      return [
+        { label: '用户数', value: this.stats.userCount, icon: 'el-icon-user', color: '#F0B90B', bg: 'rgba(240,185,11,0.1)' },
+        { label: '作品数', value: this.stats.workCount, icon: 'el-icon-picture', color: '#0ECB81', bg: 'rgba(14,203,129,0.1)' },
+        { label: '活动数', value: this.stats.activityCount, icon: 'el-icon-date', color: '#1EAEDB', bg: 'rgba(30,174,219,0.1)' },
+        { label: '视频数', value: this.stats.videoCount, icon: 'el-icon-video-camera', color: '#F6465D', bg: 'rgba(246,70,93,0.1)' },
+        { label: '报名数', value: this.stats.registrationCount, icon: 'el-icon-tickets', color: '#848E9C', bg: 'rgba(132,142,156,0.1)' },
+        { label: '投诉数', value: this.stats.complaintCount, icon: 'el-icon-warning', color: '#D0980B', bg: 'rgba(208,152,11,0.1)' }
+      ]
     }
   },
   async created() {
@@ -126,31 +101,25 @@ export default {
   },
   methods: {
     renderCharts(data) {
-      // 1. Works by category - pie
       this.renderPie(this.$refs.chartWorkCategory, '作品分类',
         (data.worksByCategory || []).map(item => ({ name: item.category || '未分类', value: item.count })))
 
-      // 2. Activity status - pie
       const activityStatusMap = { 0: '未开始', 1: '进行中', 2: '已结束' }
       this.renderPie(this.$refs.chartActivityStatus, '活动状态',
         (data.activitiesByStatus || []).map(item => ({ name: activityStatusMap[item.status] || '未知', value: item.count })))
 
-      // 3. Registration status - pie
       const regStatusMap = { 0: '待审核', 1: '已通过', 2: '已拒绝', 3: '已取消' }
       this.renderPie(this.$refs.chartRegStatus, '报名状态',
         (data.registrationsByStatus || []).map(item => ({ name: regStatusMap[item.status] || '未知', value: item.count })))
 
-      // 4. Complaint status - pie
       const compStatusMap = { 0: '待处理', 1: '已处理', 2: '已驳回' }
       this.renderPie(this.$refs.chartComplaintStatus, '投诉状态',
         (data.complaintsByStatus || []).map(item => ({ name: compStatusMap[item.status] || '未知', value: item.count })))
 
-      // 5. Work status - pie
       const workStatusMap = { 0: '已下架', 1: '正常' }
       this.renderPie(this.$refs.chartWorkStatus, '作品状态',
         (data.worksByStatus || []).map(item => ({ name: workStatusMap[item.status] || '未知', value: item.count })))
 
-      // 6. Top liked works - bar
       const topWorks = data.topLikedWorks || []
       this.renderBar(this.$refs.chartTopLiked, '点赞排行',
         topWorks.map(item => item.title),
@@ -163,6 +132,7 @@ export default {
       chart.setOption({
         tooltip: { trigger: 'item', formatter: '{b}: {c} ({d}%)' },
         legend: { bottom: 0 },
+        color: ['#F0B90B', '#0ECB81', '#F6465D', '#1EAEDB', '#848E9C', '#D0980B'],
         series: [{
           name: title, type: 'pie', radius: ['35%', '60%'],
           label: { formatter: '{b}\n{c}' },
@@ -179,7 +149,7 @@ export default {
         grid: { left: 60, right: 20, bottom: 60, top: 20 },
         xAxis: { type: 'category', data: categories, axisLabel: { rotate: 30, interval: 0 } },
         yAxis: { type: 'value', minInterval: 1 },
-        series: [{ name: title, type: 'bar', data: values, itemStyle: { color: '#409EFF' }, barMaxWidth: 40 }]
+        series: [{ name: title, type: 'bar', data: values, itemStyle: { color: '#F0B90B', borderRadius: [4, 4, 0, 0] }, barMaxWidth: 40 }]
       })
     }
   }
@@ -187,8 +157,52 @@ export default {
 </script>
 
 <style scoped>
-.stat-card { display:flex; align-items:center; }
-.stat-card i { font-size:36px; margin-right:15px; }
-.stat-card .num { font-size:24px; font-weight:bold; }
-.stat-card .label { color:#999; margin-top:3px; font-size:13px; }
+.stat-card {
+  background: var(--color-surface);
+  border-radius: var(--radius-card);
+  border: 1px solid var(--color-border);
+  box-shadow: var(--shadow-card);
+  padding: 20px;
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+.stat-icon {
+  width: 48px;
+  height: 48px;
+  border-radius: var(--radius-input);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.stat-icon i {
+  font-size: 24px;
+}
+.stat-num {
+  font-size: 24px;
+  font-weight: 700;
+  color: var(--color-text);
+  line-height: 1;
+}
+.stat-label {
+  font-size: 13px;
+  color: var(--color-text-slate);
+  margin-top: 4px;
+  font-weight: 500;
+}
+.chart-card {
+  background: var(--color-surface);
+  border-radius: var(--radius-card);
+  border: 1px solid var(--color-border);
+  box-shadow: var(--shadow-card);
+  padding: 20px;
+}
+.chart-header {
+  font-size: 16px;
+  font-weight: 600;
+  color: var(--color-text);
+  margin-bottom: 12px;
+  padding-bottom: 12px;
+  border-bottom: 1px solid var(--color-border);
+}
 </style>

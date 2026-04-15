@@ -1,7 +1,11 @@
 <template>
   <div class="login-container">
     <div class="login-box">
-      <h2>书法交流活动管理系统</h2>
+      <div class="login-header">
+        <span class="login-logo">书</span>
+        <h2>书法管理系统</h2>
+        <p class="login-subtitle">管理员登录</p>
+      </div>
       <el-form :model="form" :rules="rules" ref="loginForm">
         <el-form-item prop="username">
           <el-input v-model="form.username" prefix-icon="el-icon-user" placeholder="请输入用户名"></el-input>
@@ -10,7 +14,7 @@
           <el-input v-model="form.password" prefix-icon="el-icon-lock" placeholder="请输入密码" type="password" @keyup.enter.native="login"></el-input>
         </el-form-item>
         <el-form-item>
-          <el-button type="primary" style="width:100%" @click="login" :loading="loading">登 录</el-button>
+          <el-button type="primary" style="width:100%;border-radius:50px;padding:12px 0;font-size:16px" @click="login" :loading="loading">登 录</el-button>
         </el-form-item>
       </el-form>
     </div>
@@ -50,13 +54,45 @@ export default {
 
 <style scoped>
 .login-container {
-  height: 100vh; display: flex; align-items: center; justify-content: center;
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--color-dark);
 }
 .login-box {
-  width: 400px; padding: 40px; background: #fff; border-radius: 10px; box-shadow: 0 10px 40px rgba(0,0,0,0.2);
+  width: 420px;
+  padding: 48px 40px;
+  background: var(--color-surface);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-card);
 }
-.login-box h2 {
-  text-align: center; margin-bottom: 30px; color: #333;
+.login-header {
+  text-align: center;
+  margin-bottom: 32px;
+}
+.login-logo {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 48px;
+  height: 48px;
+  background: var(--color-primary);
+  color: var(--color-ink);
+  font-size: 22px;
+  font-weight: 700;
+  border-radius: var(--radius-input);
+  margin-bottom: 16px;
+}
+.login-header h2 {
+  font-size: 24px;
+  font-weight: 700;
+  color: var(--color-text);
+  margin-bottom: 6px;
+}
+.login-subtitle {
+  font-size: 14px;
+  color: var(--color-text-slate);
+  font-weight: 500;
 }
 </style>

@@ -1,7 +1,10 @@
 <template>
-  <div class="login-container">
-    <div class="login-box">
-      <h2>书法交流活动平台</h2>
+  <div class="auth-container">
+    <div class="auth-card">
+      <div class="auth-header">
+        <h2 class="auth-title">书法交流平台</h2>
+        <p class="auth-subtitle">登录你的账号</p>
+      </div>
       <el-form :model="form" :rules="rules" ref="loginForm">
         <el-form-item prop="username">
           <el-input v-model="form.username" prefix-icon="el-icon-user" placeholder="请输入用户名"></el-input>
@@ -10,12 +13,12 @@
           <el-input v-model="form.password" prefix-icon="el-icon-lock" placeholder="请输入密码" type="password" @keyup.enter.native="login"></el-input>
         </el-form-item>
         <el-form-item>
-          <el-button type="primary" style="width:100%" @click="login" :loading="loading">登 录</el-button>
+          <el-button type="primary" style="width:100%;border-radius:50px;padding:12px 0;font-size:16px" @click="login" :loading="loading">登 录</el-button>
         </el-form-item>
-        <div style="text-align:center">
-          <router-link to="/register" style="color:#409EFF">没有账号？去注册</router-link>
-        </div>
       </el-form>
+      <div class="auth-footer">
+        <router-link to="/register">没有账号？去注册</router-link>
+      </div>
     </div>
   </div>
 </template>
@@ -41,10 +44,8 @@ export default {
           const res = await this.$request.post('/api/user/login', this.form)
           localStorage.setItem('user', JSON.stringify(res.data))
           this.$message.success('登录成功')
-          this.$router.push('/')
-        } catch (e) {} finally {
-          this.loading = false
-        }
+          this.$router.push('/home')
+        } catch (e) {} finally { this.loading = false }
       })
     }
   }
@@ -52,12 +53,46 @@ export default {
 </script>
 
 <style scoped>
-.login-container {
-  height: 100vh; display: flex; align-items: center; justify-content: center;
-  background: linear-gradient(135deg, #2c3e50 0%, #4ca1af 100%);
+.auth-container {
+  height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--color-dark);
 }
-.login-box {
-  width: 400px; padding: 40px; background: #fff; border-radius: 10px; box-shadow: 0 10px 40px rgba(0,0,0,0.2);
+.auth-card {
+  width: 420px;
+  padding: 48px 40px;
+  background: var(--color-surface);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-card);
 }
-.login-box h2 { text-align: center; margin-bottom: 30px; color: #333; }
+.auth-header {
+  text-align: center;
+  margin-bottom: 32px;
+}
+.auth-title {
+  font-size: 24px;
+  font-weight: 700;
+  color: var(--color-text);
+  margin-bottom: 8px;
+}
+.auth-subtitle {
+  font-size: 15px;
+  color: var(--color-text-slate);
+  font-weight: 500;
+}
+.auth-footer {
+  text-align: center;
+  margin-top: 8px;
+}
+.auth-footer a {
+  color: var(--color-primary);
+  font-size: 14px;
+  font-weight: 600;
+  text-decoration: none;
+}
+.auth-footer a:hover {
+  color: var(--color-primary-hover);
+}
 </style>

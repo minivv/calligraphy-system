@@ -1,13 +1,11 @@
 <template>
   <el-container style="height:100vh">
-    <el-aside :width="isCollapse ? '64px' : '220px'" style="background:#304156;transition:width 0.3s">
-      <div class="logo" v-if="!isCollapse">
-        <h3 style="color:#fff;text-align:center;line-height:60px;font-size:16px">书法管理系统</h3>
+    <el-aside :width="isCollapse ? '64px' : '220px'" class="admin-aside">
+      <div class="aside-logo">
+        <span class="logo-icon">书</span>
+        <span v-if="!isCollapse" class="logo-text">书法管理系统</span>
       </div>
-      <div class="logo" v-else>
-        <h3 style="color:#fff;text-align:center;line-height:60px">书</h3>
-      </div>
-      <el-menu :default-active="$route.path" router background-color="#304156" text-color="#bfcbd9" active-text-color="#409EFF" :collapse="isCollapse">
+      <el-menu :default-active="$route.path" router background-color="#222126" text-color="#848E9C" active-text-color="#F0B90B" :collapse="isCollapse" class="admin-menu">
         <el-menu-item index="/dashboard"><i class="el-icon-s-home"></i><span slot="title">首页</span></el-menu-item>
         <el-menu-item index="/users" v-if="admin.role==='ADMIN'"><i class="el-icon-user"></i><span slot="title">用户管理</span></el-menu-item>
         <el-menu-item index="/admins" v-if="admin.role==='ADMIN'"><i class="el-icon-s-custom"></i><span slot="title">管理员管理</span></el-menu-item>
@@ -20,16 +18,16 @@
       </el-menu>
     </el-aside>
     <el-container>
-      <el-header style="background:#fff;display:flex;align-items:center;justify-content:space-between;box-shadow:0 1px 4px rgba(0,0,0,0.1)">
-        <el-button type="text" @click="isCollapse=!isCollapse">
-          <i :class="isCollapse?'el-icon-s-unfold':'el-icon-s-fold'" style="font-size:24px"></i>
+      <el-header class="admin-header">
+        <el-button type="text" @click="isCollapse=!isCollapse" class="collapse-btn">
+          <i :class="isCollapse?'el-icon-s-unfold':'el-icon-s-fold'" style="font-size:22px;color:var(--color-text)"></i>
         </el-button>
-        <div>
-          <span style="margin-right:15px">{{ admin.nickname || admin.username }}</span>
-          <el-button type="text" @click="logout"><i class="el-icon-switch-button"></i> 退出</el-button>
+        <div class="header-right">
+          <span class="admin-name">{{ admin.nickname || admin.username }}</span>
+          <el-button type="text" @click="logout" class="logout-btn"><i class="el-icon-switch-button"></i> 退出</el-button>
         </div>
       </el-header>
-      <el-main style="background:#f0f2f5">
+      <el-main class="admin-main">
         <router-view />
       </el-main>
     </el-container>
@@ -54,5 +52,71 @@ export default {
 </script>
 
 <style scoped>
-.logo { height: 60px; border-bottom: 1px solid rgba(255,255,255,0.1); }
+.admin-aside {
+  background: var(--color-dark);
+  transition: width 0.3s;
+  overflow: hidden;
+}
+.aside-logo {
+  height: 64px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  border-bottom: 1px solid rgba(255,255,255,0.08);
+}
+.logo-icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 32px;
+  height: 32px;
+  background: var(--color-primary);
+  color: var(--color-ink);
+  font-size: 16px;
+  font-weight: 700;
+  border-radius: var(--radius-sm);
+}
+.logo-text {
+  color: #FFFFFF;
+  font-size: 15px;
+  font-weight: 600;
+  white-space: nowrap;
+}
+.admin-menu {
+  border-right: none !important;
+}
+.admin-header {
+  background: var(--color-surface);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  border-bottom: 1px solid var(--color-border);
+  height: 64px !important;
+  padding: 0 24px;
+}
+.collapse-btn {
+  padding: 4px !important;
+}
+.header-right {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+.admin-name {
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--color-text);
+}
+.logout-btn {
+  color: var(--color-text-slate) !important;
+  font-size: 14px;
+}
+.logout-btn:hover {
+  color: var(--color-danger) !important;
+}
+.admin-main {
+  background: var(--color-surface-snow);
+  padding: 24px;
+}
 </style>
