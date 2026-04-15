@@ -17,16 +17,14 @@
         <div class="activity-card" @click="$router.push('/activity/'+item.id)">
           <div class="activity-card-cover">
             <el-image v-if="item.coverImage" :src="item.coverImage" style="width:100%;height:100%" fit="cover"></el-image>
-            <div v-else class="activity-card-cover-fallback">
-              <i class="el-icon-date"></i>
-            </div>
+            <div v-else class="activity-card-cover-fallback"><i class="el-icon-date"></i></div>
           </div>
           <div class="activity-card-body">
             <h4 class="activity-card-title">{{ item.title }}</h4>
             <p class="activity-card-info"><i class="el-icon-location-outline"></i> {{ item.location }}</p>
             <p class="activity-card-info"><i class="el-icon-time"></i> {{ item.startTime }}</p>
             <div class="activity-card-footer">
-              <el-tag size="mini" :type="['info','success','danger'][item.status]" effect="plain">{{ ['未开始','进行中','已结束'][item.status] }}</el-tag>
+              <el-tag size="mini" :type="['info','success','danger'][item.status]">{{ ['未开始','进行中','已结束'][item.status] }}</el-tag>
               <span class="meta-stat">{{ item.currentParticipants }}/{{ item.maxParticipants }}人</span>
             </div>
           </div>
@@ -54,86 +52,24 @@ export default {
 </script>
 
 <style scoped>
-.page-header {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  margin-bottom: 24px;
-}
-.page-title {
-  font-size: 24px;
-  font-weight: 400;
-  color: var(--color-text);
-  letter-spacing: 0.12px;
-}
-.search-bar {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-}
+.page-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 24px; }
+.page-title { font-size: 28px; font-weight: 700; color: var(--color-text); }
+.search-bar { display: flex; align-items: center; gap: 8px; }
 .activity-card {
-  background: var(--color-surface);
-  border-radius: var(--radius-card);
-  border: 1px solid var(--color-border);
-  overflow: hidden;
-  cursor: pointer;
-  transition: transform 0.25s ease, box-shadow 0.25s ease;
-  box-shadow: var(--shadow-soft);
-  margin-bottom: 24px;
+  background: var(--color-surface); border-radius: var(--radius-card); border: 1px solid var(--color-border);
+  overflow: hidden; cursor: pointer; box-shadow: var(--shadow-card); transition: box-shadow 200ms ease; margin-bottom: 24px;
 }
-.activity-card:hover {
-  transform: translateY(-4px);
-  box-shadow: var(--shadow-hover);
-}
-.activity-card-cover {
-  width: 100%;
-  height: 200px;
-  overflow: hidden;
-}
+.activity-card:hover { box-shadow: var(--shadow-card-hover); }
+.activity-card-cover { width: 100%; height: 200px; overflow: hidden; }
 .activity-card-cover-fallback {
-  width: 100%;
-  height: 100%;
-  background: linear-gradient(135deg, #1b61c9, #254fad);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  color: rgba(255,255,255,0.7);
-  font-size: 48px;
+  width: 100%; height: 100%; background: var(--color-dark); display: flex; align-items: center; justify-content: center;
+  color: var(--color-primary); font-size: 48px;
 }
 .activity-card-body { padding: 20px; }
-.activity-card-title {
-  font-size: 18px;
-  font-weight: 500;
-  color: var(--color-text);
-  overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
-  margin-bottom: 10px;
-  letter-spacing: 0.1px;
-}
-.activity-card-info {
-  font-size: 13px;
-  color: var(--color-text-weak);
-  margin-bottom: 6px;
-  letter-spacing: var(--letter-spacing-caption);
-}
-.activity-card-info i {
-  margin-right: 4px;
-  color: var(--color-text-muted);
-}
-.activity-card-footer {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  margin-top: 12px;
-}
-.meta-stat {
-  font-size: 13px;
-  color: var(--color-text-muted);
-  letter-spacing: var(--letter-spacing-caption);
-}
-.pagination-wrap {
-  text-align: center;
-  margin-top: 16px;
-}
+.activity-card-title { font-size: 18px; font-weight: 600; color: var(--color-text); overflow: hidden; text-overflow: ellipsis; white-space: nowrap; margin-bottom: 10px; }
+.activity-card-info { font-size: 14px; color: var(--color-text-slate); margin-bottom: 6px; font-weight: 500; }
+.activity-card-info i { margin-right: 4px; }
+.activity-card-footer { display: flex; justify-content: space-between; align-items: center; margin-top: 12px; }
+.meta-stat { font-size: 13px; color: var(--color-text-muted); font-weight: 500; }
+.pagination-wrap { text-align: center; margin-top: 16px; }
 </style>

@@ -14,7 +14,7 @@
             <h3 class="vote-card-title">{{ item.title }}</h3>
             <p class="vote-card-desc">{{ item.description }}</p>
             <div class="vote-card-footer">
-              <el-tag size="mini" :type="['info','success','danger'][item.status]" effect="plain">{{ ['未开始','进行中','已结束'][item.status] }}</el-tag>
+              <el-tag size="mini" :type="['info','success','danger'][item.status]">{{ ['未开始','进行中','已结束'][item.status] }}</el-tag>
               <span class="meta-stat">{{ item.startTime }}</span>
             </div>
           </div>
@@ -42,67 +42,18 @@ export default {
 </script>
 
 <style scoped>
-.page-header {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  margin-bottom: 24px;
-}
-.page-title {
-  font-size: 24px;
-  font-weight: 400;
-  color: var(--color-text);
-  letter-spacing: 0.12px;
-}
-.search-bar {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-}
+.page-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 24px; }
+.page-title { font-size: 28px; font-weight: 700; color: var(--color-text); }
+.search-bar { display: flex; align-items: center; gap: 8px; }
 .vote-card {
-  background: var(--color-surface);
-  border-radius: var(--radius-card);
-  border: 1px solid var(--color-border);
-  overflow: hidden;
-  cursor: pointer;
-  transition: transform 0.25s ease, box-shadow 0.25s ease;
-  box-shadow: var(--shadow-soft);
-  margin-bottom: 24px;
+  background: var(--color-surface); border-radius: var(--radius-card); border: 1px solid var(--color-border);
+  overflow: hidden; cursor: pointer; box-shadow: var(--shadow-card); transition: box-shadow 200ms ease; margin-bottom: 24px;
 }
-.vote-card:hover {
-  transform: translateY(-4px);
-  box-shadow: var(--shadow-hover);
-}
+.vote-card:hover { box-shadow: var(--shadow-card-hover); }
 .vote-card-body { padding: 24px; }
-.vote-card-title {
-  font-size: 18px;
-  font-weight: 500;
-  color: var(--color-text);
-  margin-bottom: 10px;
-  letter-spacing: 0.1px;
-}
-.vote-card-desc {
-  font-size: 14px;
-  color: var(--color-text-weak);
-  margin-bottom: 16px;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
-  letter-spacing: var(--letter-spacing-caption);
-  line-height: 1.4;
-}
-.vote-card-footer {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-}
-.meta-stat {
-  font-size: 13px;
-  color: var(--color-text-muted);
-  letter-spacing: var(--letter-spacing-caption);
-}
-.pagination-wrap {
-  text-align: center;
-  margin-top: 16px;
-}
+.vote-card-title { font-size: 20px; font-weight: 600; color: var(--color-text); margin-bottom: 10px; }
+.vote-card-desc { font-size: 14px; color: var(--color-text-slate); margin-bottom: 16px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; font-weight: 500; line-height: 1.43; }
+.vote-card-footer { display: flex; justify-content: space-between; align-items: center; }
+.meta-stat { font-size: 13px; color: var(--color-text-muted); font-weight: 500; }
+.pagination-wrap { text-align: center; margin-top: 16px; }
 </style>

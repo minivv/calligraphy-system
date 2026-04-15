@@ -13,12 +13,12 @@
           <el-input v-model="form.password" prefix-icon="el-icon-lock" placeholder="请输入密码" type="password" @keyup.enter.native="login"></el-input>
         </el-form-item>
         <el-form-item>
-          <el-button type="primary" style="width:100%" @click="login" :loading="loading">登 录</el-button>
+          <el-button type="primary" style="width:100%;border-radius:50px;padding:12px 0;font-size:16px" @click="login" :loading="loading">登 录</el-button>
         </el-form-item>
-        <div class="auth-footer">
-          <router-link to="/register">没有账号？去注册</router-link>
-        </div>
       </el-form>
+      <div class="auth-footer">
+        <router-link to="/register">没有账号？去注册</router-link>
+      </div>
     </div>
   </div>
 </template>
@@ -44,10 +44,8 @@ export default {
           const res = await this.$request.post('/api/user/login', this.form)
           localStorage.setItem('user', JSON.stringify(res.data))
           this.$message.success('登录成功')
-          this.$router.push('/')
-        } catch (e) {} finally {
-          this.loading = false
-        }
+          this.$router.push('/home')
+        } catch (e) {} finally { this.loading = false }
       })
     }
   }
@@ -60,13 +58,13 @@ export default {
   display: flex;
   align-items: center;
   justify-content: center;
-  background: linear-gradient(135deg, #0d1b3e 0%, #1b61c9 50%, #254fad 100%);
+  background: var(--color-dark);
 }
 .auth-card {
   width: 420px;
   padding: 48px 40px;
   background: var(--color-surface);
-  border-radius: var(--radius-section);
+  border-radius: var(--radius-lg);
   box-shadow: var(--shadow-card);
 }
 .auth-header {
@@ -75,24 +73,24 @@ export default {
 }
 .auth-title {
   font-size: 24px;
-  font-weight: 600;
+  font-weight: 700;
   color: var(--color-text);
-  letter-spacing: 0.12px;
   margin-bottom: 8px;
 }
 .auth-subtitle {
   font-size: 15px;
-  color: var(--color-text-weak);
-  letter-spacing: var(--letter-spacing-body);
+  color: var(--color-text-slate);
+  font-weight: 500;
 }
 .auth-footer {
   text-align: center;
-  margin-top: 4px;
+  margin-top: 8px;
 }
 .auth-footer a {
-  font-size: 14px;
   color: var(--color-primary);
-  letter-spacing: var(--letter-spacing-caption);
+  font-size: 14px;
+  font-weight: 600;
+  text-decoration: none;
 }
 .auth-footer a:hover {
   color: var(--color-primary-hover);

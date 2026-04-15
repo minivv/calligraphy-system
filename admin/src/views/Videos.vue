@@ -1,42 +1,46 @@
 <template>
-  <el-card>
-    <div slot="header">
-      <span>视频管理</span>
-      <el-button type="primary" size="small" style="float:right" @click="openDialog(null)">新增视频</el-button>
+  <div class="page-container">
+    <div class="page-header">
+      <h2 class="page-title">视频管理</h2>
+      <el-button type="primary" @click="openDialog(null)">新增视频</el-button>
     </div>
-    <el-form :inline="true" :model="query">
-      <el-form-item><el-input v-model="query.title" placeholder="视频标题" clearable></el-input></el-form-item>
-      <el-form-item><el-button type="primary" @click="loadData">查询</el-button></el-form-item>
-    </el-form>
-    <el-table :data="tableData" border stripe>
-      <el-table-column prop="id" label="ID" width="80"></el-table-column>
-      <el-table-column prop="title" label="标题" min-width="150"></el-table-column>
-      <el-table-column prop="username" label="上传者" width="120"></el-table-column>
-      <el-table-column label="封面" width="100">
-        <template slot-scope="scope">
-          <el-image v-if="scope.row.coverImage" :src="scope.row.coverImage" style="width:60px;height:60px" fit="cover"></el-image>
-          <span v-else>-</span>
-        </template>
-      </el-table-column>
-      <el-table-column prop="likeCount" label="点赞" width="80"></el-table-column>
-      <el-table-column prop="commentCount" label="评论" width="80"></el-table-column>
-      <el-table-column label="状态" width="100">
-        <template slot-scope="scope">
-          <el-tag :type="scope.row.status===1?'success':'info'">{{ scope.row.status===1?'正常':'下架' }}</el-tag>
-        </template>
-      </el-table-column>
-      <el-table-column prop="createTime" label="创建时间" width="160"></el-table-column>
-      <el-table-column label="操作" width="200">
-        <template slot-scope="scope">
-          <el-button type="text" @click="openDialog(scope.row)">编辑</el-button>
-          <el-button type="text" @click="toggleStatus(scope.row)">{{ scope.row.status===1?'下架':'上架' }}</el-button>
-          <el-popconfirm title="确定删除？" @confirm="deleteRow(scope.row.id)">
-            <el-button slot="reference" type="text" style="color:#F56C6C">删除</el-button>
-          </el-popconfirm>
-        </template>
-      </el-table-column>
-    </el-table>
-    <el-pagination style="margin-top:15px" @current-change="handlePage" :current-page="pageNum" :page-size="pageSize" :total="total" layout="total, prev, pager, next"></el-pagination>
+    <div class="page-card">
+      <el-form :inline="true" :model="query" class="search-form">
+        <el-form-item><el-input v-model="query.title" placeholder="视频标题" clearable></el-input></el-form-item>
+        <el-form-item><el-button type="primary" @click="loadData">查询</el-button></el-form-item>
+      </el-form>
+      <el-table :data="tableData" stripe style="width:100%">
+        <el-table-column prop="id" label="ID" width="80"></el-table-column>
+        <el-table-column prop="title" label="标题" min-width="150"></el-table-column>
+        <el-table-column prop="username" label="上传者" width="120"></el-table-column>
+        <el-table-column label="封面" width="100">
+          <template slot-scope="scope">
+            <el-image v-if="scope.row.coverImage" :src="scope.row.coverImage" style="width:48px;height:48px;border-radius:6px" fit="cover"></el-image>
+            <span v-else class="text-muted">-</span>
+          </template>
+        </el-table-column>
+        <el-table-column prop="likeCount" label="点赞" width="80"></el-table-column>
+        <el-table-column prop="commentCount" label="评论" width="80"></el-table-column>
+        <el-table-column label="状态" width="100">
+          <template slot-scope="scope">
+            <el-tag :type="scope.row.status===1?'success':'info'" size="small">{{ scope.row.status===1?'正常':'下架' }}</el-tag>
+          </template>
+        </el-table-column>
+        <el-table-column prop="createTime" label="创建时间" width="160"></el-table-column>
+        <el-table-column label="操作" width="200">
+          <template slot-scope="scope">
+            <el-button type="text" @click="openDialog(scope.row)">编辑</el-button>
+            <el-button type="text" @click="toggleStatus(scope.row)">{{ scope.row.status===1?'下架':'上架' }}</el-button>
+            <el-popconfirm title="确定删除？" @confirm="deleteRow(scope.row.id)">
+              <el-button slot="reference" type="text" class="btn-danger-text">删除</el-button>
+            </el-popconfirm>
+          </template>
+        </el-table-column>
+      </el-table>
+      <div class="pagination-wrap">
+        <el-pagination @current-change="handlePage" :current-page="pageNum" :page-size="pageSize" :total="total" layout="total, prev, pager, next"></el-pagination>
+      </div>
+    </div>
 
     <el-dialog :title="form.id?'编辑视频':'新增视频'" :visible.sync="dialogVisible" width="600px">
       <el-form :model="form" label-width="80px">
@@ -45,7 +49,7 @@
         <el-form-item label="视频链接"><el-input v-model="form.videoUrl" placeholder="输入视频URL或上传视频文件"></el-input></el-form-item>
         <el-form-item label="封面图">
           <el-upload action="/api/file/upload" :show-file-list="false" :on-success="handleCoverUpload" :headers="uploadHeaders">
-            <el-image v-if="form.coverImage" :src="form.coverImage" style="width:200px;height:120px" fit="cover"></el-image>
+            <el-image v-if="form.coverImage" :src="form.coverImage" style="width:200px;height:120px;border-radius:8px" fit="cover"></el-image>
             <el-button v-else size="small" type="primary">上传封面</el-button>
           </el-upload>
         </el-form-item>
@@ -55,7 +59,7 @@
         <el-button type="primary" @click="save">确定</el-button>
       </span>
     </el-dialog>
-  </el-card>
+  </div>
 </template>
 
 <script>
@@ -97,3 +101,14 @@ export default {
   }
 }
 </script>
+
+<style scoped>
+.page-container { }
+.page-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 20px; }
+.page-title { font-size: 20px; font-weight: 600; color: var(--color-text); }
+.page-card { background: var(--color-surface); border-radius: var(--radius-card); border: 1px solid var(--color-border); box-shadow: var(--shadow-card); padding: 24px; }
+.search-form { margin-bottom: 16px; }
+.pagination-wrap { margin-top: 20px; display: flex; justify-content: flex-end; }
+.text-muted { color: var(--color-text-slate); }
+.btn-danger-text { color: var(--color-danger) !important; }
+</style>

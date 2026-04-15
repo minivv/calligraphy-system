@@ -1,34 +1,38 @@
 <template>
-  <el-card>
-    <div slot="header">
-      <span>管理员管理</span>
-      <el-button type="primary" size="small" style="float:right" @click="openDialog(null)">新增管理员</el-button>
+  <div class="page-container">
+    <div class="page-header">
+      <h2 class="page-title">管理员管理</h2>
+      <el-button type="primary" @click="openDialog(null)">新增管理员</el-button>
     </div>
-    <el-table :data="tableData" border stripe>
-      <el-table-column prop="id" label="ID" width="80"></el-table-column>
-      <el-table-column prop="username" label="用户名"></el-table-column>
-      <el-table-column prop="nickname" label="昵称"></el-table-column>
-      <el-table-column label="角色" width="140">
-        <template slot-scope="scope">
-          <el-tag :type="scope.row.role==='ADMIN'?'danger':'warning'">{{ scope.row.role==='ADMIN'?'管理员':'活动管理员' }}</el-tag>
-        </template>
-      </el-table-column>
-      <el-table-column label="状态" width="100">
-        <template slot-scope="scope">
-          <el-switch :value="scope.row.status===1" @change="toggleStatus(scope.row)"></el-switch>
-        </template>
-      </el-table-column>
-      <el-table-column prop="createTime" label="创建时间" width="160"></el-table-column>
-      <el-table-column label="操作" width="150">
-        <template slot-scope="scope">
-          <el-button type="text" @click="openDialog(scope.row)">编辑</el-button>
-          <el-popconfirm title="确定删除？" @confirm="deleteRow(scope.row.id)">
-            <el-button slot="reference" type="text" style="color:#F56C6C">删除</el-button>
-          </el-popconfirm>
-        </template>
-      </el-table-column>
-    </el-table>
-    <el-pagination style="margin-top:15px" @current-change="handlePage" :current-page="pageNum" :page-size="pageSize" :total="total" layout="total, prev, pager, next"></el-pagination>
+    <div class="page-card">
+      <el-table :data="tableData" stripe style="width:100%">
+        <el-table-column prop="id" label="ID" width="80"></el-table-column>
+        <el-table-column prop="username" label="用户名"></el-table-column>
+        <el-table-column prop="nickname" label="昵称"></el-table-column>
+        <el-table-column label="角色" width="140">
+          <template slot-scope="scope">
+            <el-tag :type="scope.row.role==='ADMIN'?'danger':'warning'" size="small">{{ scope.row.role==='ADMIN'?'管理员':'活动管理员' }}</el-tag>
+          </template>
+        </el-table-column>
+        <el-table-column label="状态" width="100">
+          <template slot-scope="scope">
+            <el-switch :value="scope.row.status===1" @change="toggleStatus(scope.row)"></el-switch>
+          </template>
+        </el-table-column>
+        <el-table-column prop="createTime" label="创建时间" width="160"></el-table-column>
+        <el-table-column label="操作" width="150">
+          <template slot-scope="scope">
+            <el-button type="text" @click="openDialog(scope.row)">编辑</el-button>
+            <el-popconfirm title="确定删除？" @confirm="deleteRow(scope.row.id)">
+              <el-button slot="reference" type="text" class="btn-danger-text">删除</el-button>
+            </el-popconfirm>
+          </template>
+        </el-table-column>
+      </el-table>
+      <div class="pagination-wrap">
+        <el-pagination @current-change="handlePage" :current-page="pageNum" :page-size="pageSize" :total="total" layout="total, prev, pager, next"></el-pagination>
+      </div>
+    </div>
 
     <el-dialog :title="form.id?'编辑管理员':'新增管理员'" :visible.sync="dialogVisible" width="500px">
       <el-form :model="form" label-width="80px">
@@ -47,7 +51,7 @@
         <el-button type="primary" @click="save">确定</el-button>
       </span>
     </el-dialog>
-  </el-card>
+  </div>
 </template>
 
 <script>
@@ -83,3 +87,12 @@ export default {
   }
 }
 </script>
+
+<style scoped>
+.page-container { }
+.page-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 20px; }
+.page-title { font-size: 20px; font-weight: 600; color: var(--color-text); }
+.page-card { background: var(--color-surface); border-radius: var(--radius-card); border: 1px solid var(--color-border); box-shadow: var(--shadow-card); padding: 24px; }
+.pagination-wrap { margin-top: 20px; display: flex; justify-content: flex-end; }
+.btn-danger-text { color: var(--color-danger) !important; }
+</style>

@@ -18,10 +18,7 @@
             <h4 class="video-card-title">{{ item.title }}</h4>
             <div class="video-card-meta">
               <span class="meta-author">{{ item.nickname || item.username }}</span>
-              <span class="meta-stat">
-                <i class="el-icon-thumb"></i> {{ item.likeCount }}
-                <i class="el-icon-chat-dot-round" style="margin-left:8px"></i> {{ item.commentCount }}
-              </span>
+              <span class="meta-stat"><i class="el-icon-thumb"></i> {{ item.likeCount }} <i class="el-icon-chat-dot-round" style="margin-left:8px"></i> {{ item.commentCount }}</span>
             </div>
           </div>
         </div>
@@ -48,83 +45,24 @@ export default {
 </script>
 
 <style scoped>
-.page-header {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  margin-bottom: 24px;
-}
-.page-title {
-  font-size: 24px;
-  font-weight: 400;
-  color: var(--color-text);
-  letter-spacing: 0.12px;
-}
-.search-bar {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-}
+.page-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 24px; }
+.page-title { font-size: 28px; font-weight: 700; color: var(--color-text); }
+.search-bar { display: flex; align-items: center; gap: 8px; }
 .video-card {
-  background: var(--color-surface);
-  border-radius: var(--radius-card);
-  border: 1px solid var(--color-border);
-  overflow: hidden;
-  cursor: pointer;
-  transition: transform 0.25s ease, box-shadow 0.25s ease;
-  box-shadow: var(--shadow-soft);
-  margin-bottom: 24px;
+  background: var(--color-surface); border-radius: var(--radius-card); border: 1px solid var(--color-border);
+  overflow: hidden; cursor: pointer; box-shadow: var(--shadow-card); transition: box-shadow 200ms ease; margin-bottom: 24px;
 }
-.video-card:hover {
-  transform: translateY(-4px);
-  box-shadow: var(--shadow-hover);
-}
+.video-card:hover { box-shadow: var(--shadow-card-hover); }
 .video-card-cover {
-  width: 100%;
-  height: 200px;
-  background: #0d1b3e;
-  position: relative;
-  display: flex;
-  align-items: center;
-  justify-content: center;
+  width: 100%; height: 200px; background: var(--color-dark); position: relative;
+  display: flex; align-items: center; justify-content: center;
 }
-.video-play-icon {
-  position: absolute;
-  font-size: 48px;
-  color: rgba(255,255,255,0.85);
-  transition: transform 0.2s;
-}
-.video-card:hover .video-play-icon {
-  transform: scale(1.1);
-}
+.video-play-icon { position: absolute; font-size: 48px; color: rgba(255,255,255,0.85); transition: color 200ms; }
+.video-card:hover .video-play-icon { color: var(--color-primary); }
 .video-card-body { padding: 16px; }
-.video-card-title {
-  font-size: 16px;
-  font-weight: 500;
-  color: var(--color-text);
-  overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
-  letter-spacing: 0.08px;
-}
-.video-card-meta {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  margin-top: 10px;
-}
-.meta-author {
-  font-size: 13px;
-  color: var(--color-text-weak);
-  letter-spacing: var(--letter-spacing-caption);
-}
-.meta-stat {
-  font-size: 13px;
-  color: var(--color-text-muted);
-  letter-spacing: var(--letter-spacing-caption);
-}
-.pagination-wrap {
-  text-align: center;
-  margin-top: 16px;
-}
+.video-card-title { font-size: 16px; font-weight: 600; color: var(--color-text); overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.video-card-meta { display: flex; justify-content: space-between; align-items: center; margin-top: 10px; }
+.meta-author { font-size: 13px; color: var(--color-text-slate); font-weight: 500; }
+.meta-stat { font-size: 13px; color: var(--color-text-muted); font-weight: 500; }
+.pagination-wrap { text-align: center; margin-top: 16px; }
 </style>

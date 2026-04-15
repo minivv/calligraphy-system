@@ -1,40 +1,44 @@
 <template>
-  <el-card>
-    <div slot="header">
-      <span>活动管理</span>
-      <el-button type="primary" size="small" style="float:right" @click="openDialog(null)">新增活动</el-button>
+  <div class="page-container">
+    <div class="page-header">
+      <h2 class="page-title">活动管理</h2>
+      <el-button type="primary" @click="openDialog(null)">新增活动</el-button>
     </div>
-    <el-form :inline="true" :model="query">
-      <el-form-item><el-input v-model="query.title" placeholder="活动标题" clearable></el-input></el-form-item>
-      <el-form-item><el-button type="primary" @click="loadData">查询</el-button></el-form-item>
-    </el-form>
-    <el-table :data="tableData" border stripe>
-      <el-table-column prop="id" label="ID" width="80"></el-table-column>
-      <el-table-column prop="title" label="标题" min-width="150"></el-table-column>
-      <el-table-column prop="location" label="地点" width="150"></el-table-column>
-      <el-table-column label="人数" width="100">
-        <template slot-scope="scope">{{ scope.row.currentParticipants }}/{{ scope.row.maxParticipants }}</template>
-      </el-table-column>
-      <el-table-column label="状态" width="100">
-        <template slot-scope="scope">
-          <el-tag :type="['info','success','danger'][scope.row.status]">{{ ['未开始','进行中','已结束'][scope.row.status] }}</el-tag>
-        </template>
-      </el-table-column>
-      <el-table-column prop="startTime" label="开始时间" width="160"></el-table-column>
-      <el-table-column prop="endTime" label="结束时间" width="160"></el-table-column>
-      <el-table-column label="操作" width="200">
-        <template slot-scope="scope">
-          <el-button type="text" @click="openDialog(scope.row)">编辑</el-button>
-          <el-button type="text" @click="updateStatus(scope.row.id, scope.row.status===0?1:2)">
-            {{ scope.row.status===0?'开始':scope.row.status===1?'结束':'' }}
-          </el-button>
-          <el-popconfirm title="确定删除？" @confirm="deleteRow(scope.row.id)">
-            <el-button slot="reference" type="text" style="color:#F56C6C">删除</el-button>
-          </el-popconfirm>
-        </template>
-      </el-table-column>
-    </el-table>
-    <el-pagination style="margin-top:15px" @current-change="handlePage" :current-page="pageNum" :page-size="pageSize" :total="total" layout="total, prev, pager, next"></el-pagination>
+    <div class="page-card">
+      <el-form :inline="true" :model="query" class="search-form">
+        <el-form-item><el-input v-model="query.title" placeholder="活动标题" clearable></el-input></el-form-item>
+        <el-form-item><el-button type="primary" @click="loadData">查询</el-button></el-form-item>
+      </el-form>
+      <el-table :data="tableData" stripe style="width:100%">
+        <el-table-column prop="id" label="ID" width="80"></el-table-column>
+        <el-table-column prop="title" label="标题" min-width="150"></el-table-column>
+        <el-table-column prop="location" label="地点" width="150"></el-table-column>
+        <el-table-column label="人数" width="100">
+          <template slot-scope="scope">{{ scope.row.currentParticipants }}/{{ scope.row.maxParticipants }}</template>
+        </el-table-column>
+        <el-table-column label="状态" width="100">
+          <template slot-scope="scope">
+            <el-tag :type="['info','success','danger'][scope.row.status]" size="small">{{ ['未开始','进行中','已结束'][scope.row.status] }}</el-tag>
+          </template>
+        </el-table-column>
+        <el-table-column prop="startTime" label="开始时间" width="160"></el-table-column>
+        <el-table-column prop="endTime" label="结束时间" width="160"></el-table-column>
+        <el-table-column label="操作" width="200">
+          <template slot-scope="scope">
+            <el-button type="text" @click="openDialog(scope.row)">编辑</el-button>
+            <el-button type="text" @click="updateStatus(scope.row.id, scope.row.status===0?1:2)">
+              {{ scope.row.status===0?'开始':scope.row.status===1?'结束':'' }}
+            </el-button>
+            <el-popconfirm title="确定删除？" @confirm="deleteRow(scope.row.id)">
+              <el-button slot="reference" type="text" class="btn-danger-text">删除</el-button>
+            </el-popconfirm>
+          </template>
+        </el-table-column>
+      </el-table>
+      <div class="pagination-wrap">
+        <el-pagination @current-change="handlePage" :current-page="pageNum" :page-size="pageSize" :total="total" layout="total, prev, pager, next"></el-pagination>
+      </div>
+    </div>
 
     <el-dialog :title="form.id?'编辑活动':'新增活动'" :visible.sync="dialogVisible" width="600px">
       <el-form :model="form" label-width="100px">
@@ -44,7 +48,7 @@
         <el-form-item label="最大人数"><el-input-number v-model="form.maxParticipants" :min="0"></el-input-number></el-form-item>
         <el-form-item label="封面图片">
           <el-upload action="/api/file/upload" :show-file-list="false" :on-success="handleUpload">
-            <el-image v-if="form.coverImage" :src="form.coverImage" style="width:150px;height:100px" fit="cover"></el-image>
+            <el-image v-if="form.coverImage" :src="form.coverImage" style="width:150px;height:100px;border-radius:8px" fit="cover"></el-image>
             <el-button v-else size="small" type="primary">上传图片</el-button>
           </el-upload>
         </el-form-item>
@@ -56,7 +60,7 @@
         <el-button type="primary" @click="save">确定</el-button>
       </span>
     </el-dialog>
-  </el-card>
+  </div>
 </template>
 
 <script>
@@ -90,3 +94,13 @@ export default {
   }
 }
 </script>
+
+<style scoped>
+.page-container { }
+.page-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 20px; }
+.page-title { font-size: 20px; font-weight: 600; color: var(--color-text); }
+.page-card { background: var(--color-surface); border-radius: var(--radius-card); border: 1px solid var(--color-border); box-shadow: var(--shadow-card); padding: 24px; }
+.search-form { margin-bottom: 16px; }
+.pagination-wrap { margin-top: 20px; display: flex; justify-content: flex-end; }
+.btn-danger-text { color: var(--color-danger) !important; }
+</style>

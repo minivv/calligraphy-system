@@ -1,13 +1,13 @@
 <template>
   <div>
-    <!-- Hero Banner -->
+    <!-- Hero -->
     <div class="hero">
       <div class="hero-content">
         <h1 class="hero-title">探索书法之美</h1>
         <p class="hero-subtitle">传承经典，交流艺术，共享书法文化</p>
         <div class="hero-actions">
-          <el-button type="primary" size="medium" @click="$router.push('/works')">浏览作品</el-button>
-          <el-button size="medium" @click="$router.push('/activities')">查看活动</el-button>
+          <router-link to="/works" class="btn-hero-primary">浏览作品</router-link>
+          <router-link to="/activities" class="btn-hero-secondary">查看活动</router-link>
         </div>
       </div>
     </div>
@@ -23,9 +23,7 @@
           <div class="work-card" @click="$router.push('/work/'+item.id)">
             <div class="work-card-cover">
               <el-image v-if="item.imageUrl" :src="item.imageUrl" style="width:100%;height:100%" fit="cover"></el-image>
-              <div v-else class="work-card-placeholder">
-                <i class="el-icon-picture"></i>
-              </div>
+              <div v-else class="work-card-placeholder"><i class="el-icon-picture"></i></div>
             </div>
             <div class="work-card-body">
               <h4 class="work-card-title">{{ item.title }}</h4>
@@ -53,7 +51,7 @@
               <p class="activity-card-info"><i class="el-icon-location-outline"></i> {{ item.location }}</p>
               <p class="activity-card-info"><i class="el-icon-time"></i> {{ item.startTime }}</p>
               <div class="activity-card-footer">
-                <el-tag size="mini" :type="['info','success','danger'][item.status]" effect="plain">{{ ['未开始','进行中','已结束'][item.status] }}</el-tag>
+                <el-tag size="mini" :type="['info','success','danger'][item.status]">{{ ['未开始','进行中','已结束'][item.status] }}</el-tag>
                 <span class="meta-stat">{{ item.currentParticipants }}/{{ item.maxParticipants }}人</span>
               </div>
             </div>
@@ -76,7 +74,7 @@
               <div class="video-play-icon"><i class="el-icon-video-play"></i></div>
             </div>
             <div class="video-card-body">
-              <h4 class="work-card-title">{{ item.title }}</h4>
+              <h4 class="video-card-title">{{ item.title }}</h4>
               <div class="work-card-meta">
                 <span class="meta-author">{{ item.nickname || item.username }}</span>
                 <span class="meta-stat"><i class="el-icon-thumb"></i> {{ item.likeCount }}</span>
@@ -91,9 +89,7 @@
 
 <script>
 export default {
-  data() {
-    return { homeData: { works: [], activities: [], videos: [] } }
-  },
+  data() { return { homeData: { works: [], activities: [], videos: [] } } },
   async created() {
     try {
       const res = await this.$request.get('/api/front/home')
@@ -104,47 +100,66 @@ export default {
 </script>
 
 <style scoped>
-/* Hero */
 .hero {
-  background: linear-gradient(135deg, #0d1b3e 0%, #1b61c9 100%);
-  border-radius: var(--radius-section);
+  background: var(--color-dark);
+  border-radius: var(--radius-lg);
   padding: 80px 48px;
-  margin-bottom: 40px;
   text-align: center;
+  margin-bottom: 48px;
 }
 .hero-title {
-  font-size: 48px;
-  font-weight: 400;
-  color: #fff;
-  line-height: 1.15;
-  margin-bottom: 12px;
+  font-size: 60px;
+  font-weight: 700;
+  color: #FFFFFF;
+  line-height: 1.08;
+  margin-bottom: 16px;
 }
 .hero-subtitle {
-  font-size: 18px;
-  color: rgba(255,255,255,0.75);
+  font-size: 20px;
+  font-weight: 500;
+  color: var(--color-text-slate);
   line-height: 1.5;
-  letter-spacing: 0.18px;
   margin-bottom: 32px;
 }
 .hero-actions {
   display: flex;
+  gap: 16px;
   justify-content: center;
-  gap: 12px;
 }
-.hero-actions .el-button--default {
-  background: rgba(255,255,255,0.15) !important;
-  border-color: rgba(255,255,255,0.3) !important;
-  color: #fff !important;
+.btn-hero-primary {
+  display: inline-block;
+  background: var(--color-primary);
+  color: var(--color-ink);
+  font-size: 16px;
+  font-weight: 600;
+  padding: 12px 32px;
+  border-radius: var(--radius-pill);
+  text-decoration: none;
+  letter-spacing: var(--letter-spacing-button);
+  transition: background 200ms ease;
 }
-.hero-actions .el-button--default:hover {
-  background: rgba(255,255,255,0.25) !important;
-  border-color: rgba(255,255,255,0.5) !important;
+.btn-hero-primary:hover {
+  background: var(--color-focus);
+  color: #FFFFFF;
 }
-
-/* Section */
-.section {
-  margin-bottom: 40px;
+.btn-hero-secondary {
+  display: inline-block;
+  background: transparent;
+  color: #FFFFFF;
+  font-size: 16px;
+  font-weight: 600;
+  padding: 12px 32px;
+  border-radius: var(--radius-pill);
+  border: 1px solid rgba(255,255,255,0.3);
+  text-decoration: none;
+  transition: border-color 200ms ease, background 200ms ease;
 }
+.btn-hero-secondary:hover {
+  border-color: var(--color-primary);
+  background: rgba(240,185,11,0.1);
+  color: var(--color-primary);
+}
+.section { margin-bottom: 48px; }
 .section-header {
   display: flex;
   justify-content: space-between;
@@ -153,41 +168,33 @@ export default {
 }
 .section-title {
   font-size: 24px;
-  font-weight: 400;
+  font-weight: 700;
   color: var(--color-text);
-  letter-spacing: 0.12px;
-  line-height: 1.3;
 }
 .section-more {
   font-size: 14px;
+  font-weight: 600;
   color: var(--color-primary);
   cursor: pointer;
-  font-weight: 500;
-  letter-spacing: var(--letter-spacing-button);
-  transition: color 0.2s;
+  transition: color 200ms;
 }
 .section-more:hover { color: var(--color-primary-hover); }
-
-/* Work Card */
 .work-card {
   background: var(--color-surface);
   border-radius: var(--radius-card);
   border: 1px solid var(--color-border);
   overflow: hidden;
   cursor: pointer;
-  transition: transform 0.25s ease, box-shadow 0.25s ease;
-  box-shadow: var(--shadow-soft);
+  box-shadow: var(--shadow-card);
+  transition: box-shadow 200ms ease;
   margin-bottom: 24px;
 }
-.work-card:hover {
-  transform: translateY(-4px);
-  box-shadow: var(--shadow-hover);
-}
+.work-card:hover { box-shadow: var(--shadow-card-hover); }
 .work-card-cover {
   width: 100%;
   height: 200px;
   overflow: hidden;
-  background: var(--color-surface-subtle);
+  background: var(--color-surface-snow);
 }
 .work-card-placeholder {
   width: 100%;
@@ -198,100 +205,79 @@ export default {
   color: var(--color-border);
   font-size: 40px;
 }
-.work-card-body {
-  padding: 16px;
-}
+.work-card-body { padding: 16px; }
 .work-card-title {
   font-size: 16px;
-  font-weight: 500;
+  font-weight: 600;
   color: var(--color-text);
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
-  letter-spacing: 0.08px;
-  line-height: 1.3;
 }
 .work-card-meta {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  margin-top: 8px;
+  margin-top: 10px;
 }
 .meta-author {
   font-size: 13px;
-  color: var(--color-text-weak);
-  letter-spacing: var(--letter-spacing-caption);
+  color: var(--color-text-slate);
+  font-weight: 500;
 }
 .meta-stat {
   font-size: 13px;
   color: var(--color-text-muted);
-  letter-spacing: var(--letter-spacing-caption);
+  font-weight: 500;
 }
-
-/* Activity Card */
 .activity-card {
   background: var(--color-surface);
   border-radius: var(--radius-card);
   border: 1px solid var(--color-border);
-  overflow: hidden;
   cursor: pointer;
-  transition: transform 0.25s ease, box-shadow 0.25s ease;
-  box-shadow: var(--shadow-soft);
+  box-shadow: var(--shadow-card);
+  transition: box-shadow 200ms ease;
   margin-bottom: 24px;
 }
-.activity-card:hover {
-  transform: translateY(-4px);
-  box-shadow: var(--shadow-hover);
-}
-.activity-card-body {
-  padding: 24px;
-}
+.activity-card:hover { box-shadow: var(--shadow-card-hover); }
+.activity-card-body { padding: 20px; }
 .activity-card-title {
   font-size: 18px;
-  font-weight: 500;
+  font-weight: 600;
   color: var(--color-text);
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
-  margin-bottom: 12px;
-  letter-spacing: 0.1px;
+  margin-bottom: 10px;
 }
 .activity-card-info {
-  font-size: 13px;
-  color: var(--color-text-weak);
+  font-size: 14px;
+  color: var(--color-text-slate);
   margin-bottom: 6px;
-  letter-spacing: var(--letter-spacing-caption);
+  font-weight: 500;
 }
-.activity-card-info i {
-  margin-right: 4px;
-  color: var(--color-text-muted);
-}
+.activity-card-info i { margin-right: 4px; }
 .activity-card-footer {
   display: flex;
   justify-content: space-between;
   align-items: center;
   margin-top: 12px;
 }
-
-/* Video Card */
 .video-card {
   background: var(--color-surface);
   border-radius: var(--radius-card);
   border: 1px solid var(--color-border);
   overflow: hidden;
   cursor: pointer;
-  transition: transform 0.25s ease, box-shadow 0.25s ease;
-  box-shadow: var(--shadow-soft);
+  box-shadow: var(--shadow-card);
+  transition: box-shadow 200ms ease;
   margin-bottom: 24px;
 }
-.video-card:hover {
-  transform: translateY(-4px);
-  box-shadow: var(--shadow-hover);
-}
+.video-card:hover { box-shadow: var(--shadow-card-hover); }
 .video-card-cover {
   width: 100%;
-  height: 180px;
-  background: #0d1b3e;
+  height: 200px;
+  background: var(--color-dark);
   position: relative;
   display: flex;
   align-items: center;
@@ -301,12 +287,16 @@ export default {
   position: absolute;
   font-size: 48px;
   color: rgba(255,255,255,0.85);
-  transition: transform 0.2s;
+  transition: color 200ms;
 }
-.video-card:hover .video-play-icon {
-  transform: scale(1.1);
-}
-.video-card-body {
-  padding: 16px;
+.video-card:hover .video-play-icon { color: var(--color-primary); }
+.video-card-body { padding: 16px; }
+.video-card-title {
+  font-size: 16px;
+  font-weight: 600;
+  color: var(--color-text);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 }
 </style>
